@@ -28,6 +28,9 @@ public class PostgreDB {
         } catch (SQLException e) {
             System.out.println("Connection Failed");
             e.printStackTrace();
+        }
+    }
+
 
     public void createUser(String name, String login, String password) {
         setConnection();
@@ -40,7 +43,7 @@ public class PostgreDB {
             pst.executeUpdate();
             System.out.println("success created user");
 
-        } catch (SQLException error){
+        } catch (SQLException error) {
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
         } finally {
@@ -88,7 +91,7 @@ public class PostgreDB {
                     }
                 }
             }
-        } catch (SQLException error){
+        } catch (SQLException error) {
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
         } finally {
@@ -135,14 +138,14 @@ public class PostgreDB {
             } catch (SQLException error) {
                 System.out.println(error.getMessage());
             }
-        } catch (SQLException error){
+        } catch (SQLException error) {
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
 
         }
         return data;
     }
-          
+
     public ObservableList<String> getKinds() {
         setConnection();
 
@@ -152,7 +155,7 @@ public class PostgreDB {
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             resultSet = pst.executeQuery();
-          
+
             try {
                 while (resultSet.next()) {
                     data.add(resultSet.getString("kind"));
@@ -160,7 +163,7 @@ public class PostgreDB {
             } catch (SQLException error) {
                 System.out.println(error.getMessage());
             }
-        } catch (SQLException error){
+        } catch (SQLException error) {
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
         }
@@ -179,7 +182,7 @@ public class PostgreDB {
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setString(1, kind);
             resultSet = pst.executeQuery();
-          
+
             try {
                 while (resultSet.next()) {
                     kind_id = resultSet.getInt("id");
@@ -187,9 +190,10 @@ public class PostgreDB {
             } catch (SQLException error) {
                 System.out.println(error.getMessage());
             }
-        } catch (SQLException error){
+        } catch (SQLException error) {
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
+        }
 
         try (PreparedStatement pst = connection.prepareStatement(query2)) {
             pst.setString(1, name);
@@ -198,11 +202,11 @@ public class PostgreDB {
             pst.setInt(4, HelloApplication.idUser);
             pst.executeUpdate();
             System.out.println("success created animal");
-        } catch (SQLException error){
+        } catch (SQLException error) {
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
         } finally {
-          
+
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -228,7 +232,7 @@ public class PostgreDB {
             pst.setInt(1, id);
             pst.executeUpdate();
             System.out.println("delete animal");
-        } catch (SQLException error){
+        } catch (SQLException error) {
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
         } finally {
@@ -245,3 +249,4 @@ public class PostgreDB {
         }
     }
 }
+

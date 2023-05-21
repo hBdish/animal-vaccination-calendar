@@ -9,9 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
@@ -33,6 +31,12 @@ public class AnimalController implements Initializable {
     public TableColumn<EventsAnimals, Date> date_end;
     @FXML
     public Label idLable;
+    @FXML
+    public TextField name_event;
+    @FXML
+    public DatePicker date_start_event;
+    @FXML
+    public DatePicker date_end_event;
     PostgreDB db = new PostgreDB();
 
     @Override
@@ -48,10 +52,13 @@ public class AnimalController implements Initializable {
     }
 
     public void addEvent(ActionEvent event) {
+        db.createEvent(name_event.getText(), date_start_event.getValue(), date_end_event.getValue(), event);
         System.out.println(HelloApplication.idAnimal);
     }
 
     public void deleteEvent(ActionEvent event) {
+        EventsAnimals eventsAnimals = eventTable.getSelectionModel().getSelectedItem();
+        db.deleteEvent(eventsAnimals.getId(), event);
     }
 
     public void switchToMain(ActionEvent event) {

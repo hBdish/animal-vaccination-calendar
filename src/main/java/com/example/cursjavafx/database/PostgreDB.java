@@ -288,5 +288,65 @@ public class PostgreDB {
         }
         return data;
     }
+
+    public void createEvent(String name, LocalDate date_start, LocalDate date_end, ActionEvent event) {
+        setConnection();
+
+        ResultSet resultSet;
+        String query1 = "INSERT INTO events(name, date_start, date_end, animal_id) VALUES(?, ?, ?, ?)";
+
+
+        try (PreparedStatement pst = connection.prepareStatement(query1)) {
+            pst.setString(1, name);
+            pst.setDate(2, Date.valueOf(date_start));
+            pst.setDate(3, Date.valueOf(date_end));
+            pst.setInt(4, HelloApplication.idAnimal);
+            pst.executeUpdate();
+            System.out.println("success created event");
+        } catch (SQLException error) {
+            Logger logger = Logger.getLogger(PostgreDB.class.getName());
+            logger.log(Level.SEVERE, error.getMessage(), error);
+        } finally {
+
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            try {
+                new SceneController().switchScene(event, Scenes.ANIMAL_EVENTS.getTitle());
+            } catch (IOException error) {
+                error.printStackTrace();
+            }
+        }
+    }
+
+    public void deleteEvent(int id, ActionEvent event) {
+        setConnection();
+
+        ResultSet resultSet;
+        String query = "DELETE FROM events WHERE id = ?";
+
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, id);
+            pst.executeUpdate();
+            System.out.println("delete animal");
+        } catch (SQLException error) {
+            Logger logger = Logger.getLogger(PostgreDB.class.getName());
+            logger.log(Level.SEVERE, error.getMessage(), error);
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            try {
+                new SceneController().switchScene(event, Scenes.ANIMAL_EVENTS.getTitle());
+            } catch (IOException error) {
+                error.printStackTrace();
+            }
+        }
+    }
 }
 

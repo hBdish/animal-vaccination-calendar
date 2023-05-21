@@ -1,6 +1,6 @@
 package com.example.cursjavafx;
 
-import com.example.cursjavafx.data.Scenes;
+import com.example.cursjavafx.utils.Scenes;
 import com.example.cursjavafx.database.PostgreDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

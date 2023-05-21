@@ -1,8 +1,9 @@
-package com.example.cursjavafx.data;
+package com.example.cursjavafx.utils;
 
 public enum Scenes {
     LOGIN ("login-view.fxml"),
     MAIN("main-view.fxml"),
+    ADD_ANIMAL("addAnimal.fxml"),
     REGISTRATION ("registration-view.fxml");
 
     private String title;

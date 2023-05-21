@@ -19,3 +19,4 @@
       <Button layoutX="259.0" layoutY="335.0" mnemonicParsing="false" onAction="#delete" text="Удалить" />
    </children>
 </AnchorPane>
+

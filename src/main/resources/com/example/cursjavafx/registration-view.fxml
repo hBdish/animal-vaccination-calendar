@@ -20,5 +20,4 @@
       </opaqueInsets></TextField>
     <Button onAction="#onMainButtonClick" styleClass="btn, btn-primary" text="Зарегистрироваться" />
    <Button onAction="#switchToLoginPage" text="Войти" />
-
 </VBox>

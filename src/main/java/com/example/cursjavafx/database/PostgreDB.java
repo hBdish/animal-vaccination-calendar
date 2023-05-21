@@ -1,6 +1,5 @@
 package com.example.cursjavafx.database;
 
-
 import com.example.cursjavafx.classes.Animal;
 import com.example.cursjavafx.HelloApplication;
 import com.example.cursjavafx.SceneController;
@@ -9,10 +8,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,12 +28,9 @@ public class PostgreDB {
         } catch (SQLException e) {
             System.out.println("Connection Failed");
             e.printStackTrace();
-        }
-    }
 
     public void createUser(String name, String login, String password) {
         setConnection();
-
         String query = "INSERT INTO users(name, login, password) VALUES(?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
@@ -59,6 +55,7 @@ public class PostgreDB {
     public void loginUser(String login, String password, ActionEvent event) {
         setConnection();
 
+
         String query = "SELECT * FROM users WHERE login = ? AND password = ?";
         ResultSet resultSet;
 
@@ -73,9 +70,7 @@ public class PostgreDB {
                 alert.show();
             } else {
                 while (resultSet.next()) {
-
                     HelloApplication.idUser = resultSet.getInt("id");
-
                     String log = resultSet.getString("login");
                     String pass = resultSet.getString("password");
 
@@ -135,15 +130,11 @@ public class PostgreDB {
                                     resultSet.getString("kind"),
                                     resultSet.getDate("date_birth")
                             );
-
                     data.add(a);
                 }
-
             } catch (SQLException error) {
                 System.out.println(error.getMessage());
             }
-
-
         } catch (SQLException error){
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
@@ -151,6 +142,7 @@ public class PostgreDB {
         }
         return data;
     }
+          
     public ObservableList<String> getKinds() {
         setConnection();
 
@@ -160,6 +152,7 @@ public class PostgreDB {
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             resultSet = pst.executeQuery();
+          
             try {
                 while (resultSet.next()) {
                     data.add(resultSet.getString("kind"));
@@ -186,6 +179,7 @@ public class PostgreDB {
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setString(1, kind);
             resultSet = pst.executeQuery();
+          
             try {
                 while (resultSet.next()) {
                     kind_id = resultSet.getInt("id");
@@ -193,13 +187,9 @@ public class PostgreDB {
             } catch (SQLException error) {
                 System.out.println(error.getMessage());
             }
-
-
-
         } catch (SQLException error){
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
-        }
 
         try (PreparedStatement pst = connection.prepareStatement(query2)) {
             pst.setString(1, name);
@@ -208,16 +198,17 @@ public class PostgreDB {
             pst.setInt(4, HelloApplication.idUser);
             pst.executeUpdate();
             System.out.println("success created animal");
-
         } catch (SQLException error){
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
         } finally {
+          
             try {
                 connection.close();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+
             try {
                 new SceneController().switchScene(event, Scenes.MAIN.getTitle());
             } catch (IOException error) {
@@ -253,5 +244,4 @@ public class PostgreDB {
             }
         }
     }
-
 }

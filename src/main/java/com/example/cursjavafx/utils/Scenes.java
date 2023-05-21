@@ -4,6 +4,7 @@ public enum Scenes {
     LOGIN ("login-view.fxml"),
     MAIN("main-view.fxml"),
     ADD_ANIMAL("addAnimal.fxml"),
+    ANIMAL_EVENTS("animal-view.fxml"),
     REGISTRATION ("registration-view.fxml");
 
     private String title;

@@ -3,6 +3,7 @@ package com.example.cursjavafx.database;
 import com.example.cursjavafx.classes.Animal;
 import com.example.cursjavafx.HelloApplication;
 import com.example.cursjavafx.SceneController;
+import com.example.cursjavafx.classes.EventsAnimals;
 import com.example.cursjavafx.utils.Scenes;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -30,7 +31,6 @@ public class PostgreDB {
             e.printStackTrace();
         }
     }
-
 
     public void createUser(String name, String login, String password) {
         setConnection();
@@ -125,7 +125,6 @@ public class PostgreDB {
 
             try {
                 while (resultSet.next()) {
-                    System.out.println("WHILE");
                     Animal a =
                             new Animal(
                                     resultSet.getInt("id"),
@@ -225,7 +224,6 @@ public class PostgreDB {
         setConnection();
 
         ResultSet resultSet;
-
         String query = "DELETE FROM animals WHERE id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
@@ -247,6 +245,48 @@ public class PostgreDB {
                 error.printStackTrace();
             }
         }
+    }
+
+    public ObservableList<EventsAnimals> getEvents() {
+        setConnection();
+
+        ObservableList<EventsAnimals> data = FXCollections.observableArrayList();
+        ResultSet resultSet;
+        String query = "SELECT * FROM events WHERE animal_id = ?";
+
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, HelloApplication.idAnimal);
+            resultSet = pst.executeQuery();
+
+            if (!resultSet.isBeforeFirst()) {
+                System.out.println("event res empty");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("event res empty");
+                alert.show();
+            } else {
+                System.out.println("animal not empty");
+            }
+
+            try {
+                while (resultSet.next()) {
+                    EventsAnimals event =
+                            new EventsAnimals(
+                                    resultSet.getInt("id"),
+                                    resultSet.getString("name"),
+                                    resultSet.getDate("date_start"),
+                                    resultSet.getDate("date_end")
+                            );
+                    data.add(event);
+                }
+            } catch (SQLException error) {
+                System.out.println(error.getMessage());
+            }
+        } catch (SQLException error) {
+            Logger logger = Logger.getLogger(PostgreDB.class.getName());
+            logger.log(Level.SEVERE, error.getMessage(), error);
+
+        }
+        return data;
     }
 }
 

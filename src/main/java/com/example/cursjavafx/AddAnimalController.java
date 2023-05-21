@@ -32,6 +32,5 @@ public class AddAnimalController implements Initializable {
 
     public void addAnimal(ActionEvent event) {
         db.createAnimal(name.getText(), choiceKindList.getValue(), date.getValue(), event);
-        //System.out.println(name.getText() + choiceKindList.getValue() + date.getValue());
     }
 }

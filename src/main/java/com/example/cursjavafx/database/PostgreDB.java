@@ -3,6 +3,7 @@ package com.example.cursjavafx.database;
 import com.example.cursjavafx.classes.Animal;
 import com.example.cursjavafx.HelloApplication;
 import com.example.cursjavafx.SceneController;
+import com.example.cursjavafx.classes.CalendarActivity;
 import com.example.cursjavafx.classes.EventsAnimals;
 import com.example.cursjavafx.utils.Scenes;
 import javafx.collections.FXCollections;
@@ -11,8 +12,11 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import java.io.IOException;
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 
+import java.time.ZonedDateTime;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -347,6 +351,69 @@ public class PostgreDB {
                 error.printStackTrace();
             }
         }
+    }
+
+    public Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(ZonedDateTime dateFocus) {
+        setConnection();
+
+        List<CalendarActivity> calendarActivities = new ArrayList<>();
+        ResultSet resultSet;
+
+        String query = "SELECT animals.name as animal_name, events.name as event_name, events.date_start as event_date_start, events.date_end as event_date_end\n" +
+                "FROM users \n" +
+                "JOIN animals ON users.id = animals.user_id\n" +
+                "JOIN kinds ON animals.kind_id = kinds.id\n" +
+                "JOIN events ON animals.id = events.animal_id\n" +
+                "WHERE users.id = ?";
+
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, 1);
+            resultSet = pst.executeQuery();
+
+            try {
+                while (resultSet.next()) {
+                    String animal_name = resultSet.getString("animal_name");
+                    java.util.Date date_start = resultSet.getDate("event_date_start");
+                    java.util.Date date_end = resultSet.getDate("event_date_end");
+
+                    ZonedDateTime time = ZonedDateTime.of(
+                            date_start.getYear(),
+                            date_start.getMonth(),
+                            date_start.getDay(),
+                            0,
+                            0,
+                            0,
+                            0,
+                            dateFocus.getZone());
+                    calendarActivities.add(new CalendarActivity(time, animal_name, 111111));
+                }
+            } catch (SQLException error) {
+                System.out.println(error.getMessage());
+            }
+        } catch (SQLException error) {
+            Logger logger = Logger.getLogger(PostgreDB.class.getName());
+            logger.log(Level.SEVERE, error.getMessage(), error);
+        }
+
+        return createCalendarMap(calendarActivities);
+    }
+
+    private Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> calendarActivities) {
+        Map<Integer, List<CalendarActivity>> calendarActivityMap = new HashMap<>();
+
+        for (CalendarActivity activity: calendarActivities) {
+            int activityDate = activity.getDate().getDayOfMonth();
+            if(!calendarActivityMap.containsKey(activityDate)){
+                calendarActivityMap.put(activityDate, List.of(activity));
+            } else {
+                List<CalendarActivity> OldListByDate = calendarActivityMap.get(activityDate);
+
+                List<CalendarActivity> newList = new ArrayList<>(OldListByDate);
+                newList.add(activity);
+                calendarActivityMap.put(activityDate, newList);
+            }
+        }
+        return  calendarActivityMap;
     }
 }
 

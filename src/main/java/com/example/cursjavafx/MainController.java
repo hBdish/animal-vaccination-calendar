@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -47,20 +48,27 @@ public class MainController implements Initializable {
 
     public void openAddAnimal(ActionEvent event) throws IOException {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(Scenes.ADD_ANIMAL.getTitle()));
-            Stage stage = new Stage();
-            stage.setScene(new Scene(loader.load()));
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
+            new SceneController().switchScene(event, Scenes.ADD_ANIMAL.getTitle());
+        } catch (IOException error) {
+            error.printStackTrace();
         }
-
-
     }
 
     public void delete(ActionEvent event) {
         Animal animal = animalTable.getSelectionModel().getSelectedItems().get(0);
-       System.out.println( );
-       db.deleteAnimal(animal.getId(), event);
+        db.deleteAnimal(animal.getId(), event);
+    }
+
+    public void openAnimal(ActionEvent event) {
+        try {
+            Animal animal = animalTable.getSelectionModel().getSelectedItems().get(0);
+            HelloApplication.idAnimal = animal.getId();
+            HelloApplication.nameAnimal = animal.getName();
+            new SceneController().switchScene(event, Scenes.ANIMAL_EVENTS.getTitle());
+        } catch (IOException error) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText("Выберите животное ");
+            alert.show();
+        }
     }
 }

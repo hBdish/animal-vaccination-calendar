@@ -45,7 +45,7 @@ public class PostgreDB {
 
 
     public void createUser(String name, String login, String password) {
-        try {
+        try {g
             this.connection = DriverManager
                     .getConnection(DB_URL, USER, PASS);
         } catch (SQLException e) {

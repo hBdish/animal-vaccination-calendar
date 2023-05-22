@@ -5,6 +5,7 @@ import com.example.cursjavafx.database.PostgreDB;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
@@ -18,14 +19,16 @@ import java.time.ZonedDateTime;
 import java.util.*;
 
 public class CalendarController implements Initializable {
+    public Text year;
+    public Text month;
     PostgreDB db = new PostgreDB();
 
     ZonedDateTime dateFocus;
     ZonedDateTime today;
-    @FXML
-    public Label month;
-    @FXML
-    public Label year;
+//    @FXML
+//    public Label month;
+//    @FXML
+//    public Label year;
     @FXML
     public FlowPane calendar;
 
@@ -58,7 +61,6 @@ public class CalendarController implements Initializable {
         double spacingH = calendar.getHgap();
         double spacingV = calendar.getVgap();
 
-        // Map<Integer, List<CalendarActivity>> calendarActivityMap = getCalendarActivitiesMonth(dateFocus);
         Map<Integer, List<CalendarActivity>> calendarActivityMap = db.getCalendarActivitiesMonth(dateFocus);
 
         int monthMaxDate = dateFocus.getMonth().maxLength();
@@ -85,7 +87,7 @@ public class CalendarController implements Initializable {
                 rectangle.setFill(Color.TRANSPARENT);
                 rectangle.setStroke(Color.BLACK);
                 rectangle.setStrokeWidth(strokeWidth);
-                double rectangleWidth = (calendarWidth / 7) - strokeWidth - spacingH;
+                double rectangleWidth = (calendarWidth / 7) - strokeWidth - spacingH ;
                 rectangle.setWidth(rectangleWidth);
                 double rectangleHeight = (calendarHeight / 6) - strokeWidth - spacingV;
                 rectangle.setHeight(rectangleHeight);
@@ -128,9 +130,20 @@ public class CalendarController implements Initializable {
                 });
                 break;
             }
-            Text text = new Text(calendarActivities.get(k).getClientName()
-//                    + ", " + calendarActivities.get(k).getDate().toLocalTime()
+
+            String eventInfo = calendarActivities.get(k).getEventInfo() ? "День начала" : "День окончания";
+            Text text = new Text(
+                    calendarActivities.get(k).getClientName() + "\n" +
+                    eventInfo + "\n" +
+                    calendarActivities.get(k).getEvent_name()
             );
+
+            if (calendarActivities.get(k).getEventInfo()) {
+                calendarActivityBox.setStyle("-fx-background-color:GREEN");
+            } else {
+                calendarActivityBox.setStyle("-fx-background-color:RED");
+            }
+
             calendarActivityBox.getChildren().add(text);
             text.setOnMouseClicked(mouseEvent -> {
                 System.out.println(text.getText());
@@ -139,7 +152,8 @@ public class CalendarController implements Initializable {
         calendarActivityBox.setTranslateY((rectangleHeight / 2) * 0.20);
         calendarActivityBox.setMaxWidth(rectangleWidth * 0.8);
         calendarActivityBox.setMaxHeight(rectangleHeight * 0.65);
-        calendarActivityBox.setStyle("-fx-background-color:GRAY");
+
+
         stackPane.getChildren().add(calendarActivityBox);
     }
 }

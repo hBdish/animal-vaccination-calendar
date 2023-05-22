@@ -373,19 +373,47 @@ public class PostgreDB {
             try {
                 while (resultSet.next()) {
                     String animal_name = resultSet.getString("animal_name");
+                    String event_name = resultSet.getString("event_name");
                     java.util.Date date_start = resultSet.getDate("event_date_start");
                     java.util.Date date_end = resultSet.getDate("event_date_end");
 
-                    ZonedDateTime time = ZonedDateTime.of(
-                            date_start.getYear(),
-                            date_start.getMonth(),
-                            date_start.getDay(),
+
+                    ZonedDateTime timeStart = ZonedDateTime.of(
+                            date_start.getYear() + 1900,
+                            date_start.getMonth() + 1,
+                            date_start.getDate(),
                             0,
                             0,
                             0,
                             0,
-                            dateFocus.getZone());
-                    calendarActivities.add(new CalendarActivity(time, animal_name, 111111));
+                             dateFocus.getZone()
+                    );
+
+                    ZonedDateTime timeEnd = ZonedDateTime.of(
+                            date_end.getYear() + 1900,
+                            date_end.getMonth() + 1,
+                            date_end.getDate(),
+                            0,
+                            0,
+                            0,
+                            0,
+                            dateFocus.getZone()
+                    );
+
+                    if (
+                            dateFocus.getYear() == (date_start.getYear() + 1900) &&
+                                    dateFocus.getMonthValue() == (date_start.getMonth() + 1)
+                    ) {
+                        calendarActivities.add(new CalendarActivity(timeStart, event_name, animal_name, true));
+                    }
+
+                    if (
+                            dateFocus.getYear() == (date_end.getYear() + 1900) &&
+                                    dateFocus.getMonthValue() == (date_end.getMonth() + 1)
+                    ) {
+                        calendarActivities.add(new CalendarActivity(timeEnd, event_name, animal_name, false));
+                    }
+
                 }
             } catch (SQLException error) {
                 System.out.println(error.getMessage());

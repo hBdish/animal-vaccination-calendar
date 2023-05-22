@@ -20,7 +20,7 @@ public class SceneController {
         root = FXMLLoader.load(getClass().getResource(path));
         root.getStylesheets().add(BootstrapFX.bootstrapFXStylesheet());
         stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root,650, 650);
+        scene = new Scene(root,850, 850);
         stage.setScene(scene);
         stage.show();
     }

@@ -1,25 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox alignment="CENTER" prefHeight="377.0" prefWidth="382.0" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cursjavafx.AddAnimalController">
    <children>
       <AnchorPane prefHeight="377.0" prefWidth="160.0">
          <children>
-            <VBox alignment="CENTER" prefHeight="377.0" prefWidth="382.0" spacing="20.0">
+            <VBox alignment="CENTER" layoutY="30.0" prefHeight="347.0" prefWidth="382.0" spacing="4.0">
                <children>
-                  <TextField fx:id="name" />
-                  <ChoiceBox fx:id="choiceKindList" prefWidth="150.0" />
-                  <DatePicker fx:id="date" />
-                  <Button mnemonicParsing="false" onAction="#addAnimal" text="Добавить питомца" />
+                  <VBox alignment="CENTER" prefHeight="5.0" prefWidth="300.0" spacing="4.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Кличка">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="name">
+                           <VBox.margin>
+                              <Insets left="12.0" right="12.0" />
+                           </VBox.margin>
+                        </TextField>
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="99.0" prefWidth="300.0" spacing="4.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Вид животного">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <ChoiceBox fx:id="choiceKindList" prefHeight="26.0" prefWidth="356.0" styleClass="split-menu-btn, split-menu-btn-info" />
+                     </children>
+                  </VBox>
+                  <VBox alignment="CENTER" prefHeight="76.0" prefWidth="382.0" spacing="4.0">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Дата рождения">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <DatePicker fx:id="date" prefHeight="26.0" prefWidth="129.0" />
+                     </children>
+                  </VBox>
+                  <Button mnemonicParsing="false" onAction="#addAnimal" text="Добавить питомца" styleClass="btn, btn-success"/>
                </children>
             </VBox>
+            <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backOnMain" text="Назад" styleClass="btn, btn-danger"/>
          </children>
       </AnchorPane>
    </children>

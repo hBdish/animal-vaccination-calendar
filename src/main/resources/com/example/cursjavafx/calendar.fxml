@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="829.0" prefWidth="1269.0" style="-fx-background-color: #f2fafc;" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cursjavafx.CalendarController">
+<FlowPane fx:id="calendar" hgap="10.0" layoutX="14.0" layoutY="116.0" prefHeight="700.0" prefWidth="1247.0" vgap="5.0" />
+<HBox alignment="CENTER" layoutX="430.0" layoutY="16.0" prefHeight="44.0" prefWidth="419.0" spacing="5.0">
+   <children>
+      <Button mnemonicParsing="false" onAction="#backOnMounth" text="&lt;&lt;&lt;" styleClass="btn, btn-warning"/>
+      <Text fx:id="year" strokeType="OUTSIDE" strokeWidth="0.0" text="####" styleClass="h2">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Text>
+      <Text fx:id="month" strokeType="OUTSIDE" strokeWidth="0.0" text="####" styleClass="h2">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Text>
+      <Button mnemonicParsing="false" onAction="#forwardOnMounth" text="&gt;&gt;&gt;" styleClass="btn, btn-warning"/>
+   </children>
+</HBox>
+<HBox alignment="CENTER" layoutX="12.0" layoutY="63.0" prefHeight="44.0" prefWidth="1254.0" spacing="160.0">
+   <children>
+         <Text layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Вс" textAlignment="CENTER" />
+      <Text layoutX="100.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Пн" textAlignment="CENTER" styleClass="h4">
+            <HBox.margin>
+               <Insets />
+            </HBox.margin></Text>
+      <Text layoutX="222.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Вт" textAlignment="CENTER" styleClass="h4"/>
+      <Text layoutX="232.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ср" textAlignment="CENTER" styleClass="h4"/>
+      <Text layoutX="241.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Чт" textAlignment="CENTER" styleClass="h4"/>
+      <Text layoutX="251.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Пт" textAlignment="CENTER" styleClass="h4"/>
+      <Text layoutX="266.0" layoutY="37.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Сб" textAlignment="CENTER" styleClass="h4"/>
+   </children>
+</HBox>
+   <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#backToMain" text="Назад" styleClass="btn, btn-danger"/>
+
+</AnchorPane>

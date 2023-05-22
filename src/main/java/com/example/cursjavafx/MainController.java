@@ -47,11 +47,7 @@ public class MainController implements Initializable {
     }
 
     public void openAddAnimal(ActionEvent event) throws IOException {
-        try {
-            new SceneController().switchScene(event, Scenes.ADD_ANIMAL.getTitle());
-        } catch (IOException error) {
-            error.printStackTrace();
-        }
+        Scenes.ADD_ANIMAL.switchScene(event);
     }
 
     public void delete(ActionEvent event) {
@@ -60,15 +56,13 @@ public class MainController implements Initializable {
     }
 
     public void openAnimal(ActionEvent event) {
-        try {
             Animal animal = animalTable.getSelectionModel().getSelectedItems().get(0);
             HelloApplication.idAnimal = animal.getId();
             HelloApplication.nameAnimal = animal.getName();
-            new SceneController().switchScene(event, Scenes.ANIMAL_EVENTS.getTitle());
-        } catch (IOException error) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText("Выберите животное ");
-            alert.show();
-        }
+            Scenes.ANIMAL_EVENTS.switchScene(event);
+    }
+
+    public void openCalendar(ActionEvent event) {
+        Scenes.CALENDAR.switchScene(event);
     }
 }

@@ -19,10 +19,6 @@ public class RegistrationController {
     }
 
     public void switchToLoginPage(ActionEvent event) {
-        try {
-            new SceneController().switchScene(event, Scenes.LOGIN.getTitle());
-        } catch (IOException error) {
-            error.printStackTrace();
-        }
+        Scenes.LOGIN.switchScene(event);
     }
 }

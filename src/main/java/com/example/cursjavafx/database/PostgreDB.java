@@ -2,17 +2,20 @@ package com.example.cursjavafx.database;
 
 import com.example.cursjavafx.classes.Animal;
 import com.example.cursjavafx.HelloApplication;
-import com.example.cursjavafx.SceneController;
+import com.example.cursjavafx.classes.CalendarActivity;
 import com.example.cursjavafx.classes.EventsAnimals;
 import com.example.cursjavafx.utils.Scenes;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-import java.io.IOException;
+
 import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 
+import java.time.ZonedDateTime;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -78,11 +81,7 @@ public class PostgreDB {
                     String pass = resultSet.getString("password");
 
                     if (log.equals(login) && pass.equals(password)) {
-                        try {
-                            new SceneController().switchScene(event, Scenes.MAIN.getTitle());
-                        } catch (IOException error) {
-                            error.printStackTrace();
-                        }
+                        Scenes.MAIN.switchScene(event);
                     } else {
                         System.out.println("Login or password did not match!");
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -208,15 +207,11 @@ public class PostgreDB {
 
             try {
                 connection.close();
+                Scenes.MAIN.switchScene(event);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
 
-            try {
-                new SceneController().switchScene(event, Scenes.MAIN.getTitle());
-            } catch (IOException error) {
-                error.printStackTrace();
-            }
         }
     }
 
@@ -236,13 +231,9 @@ public class PostgreDB {
         } finally {
             try {
                 connection.close();
+                Scenes.MAIN.switchScene(event);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
-            }
-            try {
-                new SceneController().switchScene(event, Scenes.MAIN.getTitle());
-            } catch (IOException error) {
-                error.printStackTrace();
             }
         }
     }
@@ -314,11 +305,7 @@ public class PostgreDB {
                 throw new RuntimeException(e);
             }
 
-            try {
-                new SceneController().switchScene(event, Scenes.ANIMAL_EVENTS.getTitle());
-            } catch (IOException error) {
-                error.printStackTrace();
-            }
+            Scenes.ANIMAL_EVENTS.switchScene(event);
         }
     }
 
@@ -338,15 +325,103 @@ public class PostgreDB {
         } finally {
             try {
                 connection.close();
+                Scenes.ANIMAL_EVENTS.switchScene(event);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+
+        }
+    }
+
+    public Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(ZonedDateTime dateFocus) {
+        setConnection();
+
+        List<CalendarActivity> calendarActivities = new ArrayList<>();
+        ResultSet resultSet;
+
+        String query = "SELECT animals.name as animal_name, events.name as event_name, events.date_start as event_date_start, events.date_end as event_date_end\n" +
+                "FROM users \n" +
+                "JOIN animals ON users.id = animals.user_id\n" +
+                "JOIN kinds ON animals.kind_id = kinds.id\n" +
+                "JOIN events ON animals.id = events.animal_id\n" +
+                "WHERE users.id = ?";
+
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            pst.setInt(1, HelloApplication.idUser);
+            resultSet = pst.executeQuery();
+
             try {
-                new SceneController().switchScene(event, Scenes.ANIMAL_EVENTS.getTitle());
-            } catch (IOException error) {
-                error.printStackTrace();
+                while (resultSet.next()) {
+                    String animal_name = resultSet.getString("animal_name");
+                    String event_name = resultSet.getString("event_name");
+                    java.util.Date date_start = resultSet.getDate("event_date_start");
+                    java.util.Date date_end = resultSet.getDate("event_date_end");
+
+
+                    ZonedDateTime timeStart = ZonedDateTime.of(
+                            date_start.getYear() + 1900,
+                            date_start.getMonth() + 1,
+                            date_start.getDate(),
+                            0,
+                            0,
+                            0,
+                            0,
+                             dateFocus.getZone()
+                    );
+
+                    ZonedDateTime timeEnd = ZonedDateTime.of(
+                            date_end.getYear() + 1900,
+                            date_end.getMonth() + 1,
+                            date_end.getDate(),
+                            0,
+                            0,
+                            0,
+                            0,
+                            dateFocus.getZone()
+                    );
+
+                    if (
+                            dateFocus.getYear() == (date_start.getYear() + 1900) &&
+                                    dateFocus.getMonthValue() == (date_start.getMonth() + 1)
+                    ) {
+                        calendarActivities.add(new CalendarActivity(timeStart, event_name, animal_name, true));
+                    }
+
+                    if (
+                            dateFocus.getYear() == (date_end.getYear() + 1900) &&
+                                    dateFocus.getMonthValue() == (date_end.getMonth() + 1)
+                    ) {
+                        calendarActivities.add(new CalendarActivity(timeEnd, event_name, animal_name, false));
+                    }
+
+                }
+            } catch (SQLException error) {
+                System.out.println(error.getMessage());
+            }
+        } catch (SQLException error) {
+            Logger logger = Logger.getLogger(PostgreDB.class.getName());
+            logger.log(Level.SEVERE, error.getMessage(), error);
+        }
+
+        return createCalendarMap(calendarActivities);
+    }
+
+    private Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> calendarActivities) {
+        Map<Integer, List<CalendarActivity>> calendarActivityMap = new HashMap<>();
+
+        for (CalendarActivity activity: calendarActivities) {
+            int activityDate = activity.getDate().getDayOfMonth();
+            if(!calendarActivityMap.containsKey(activityDate)){
+                calendarActivityMap.put(activityDate, List.of(activity));
+            } else {
+                List<CalendarActivity> OldListByDate = calendarActivityMap.get(activityDate);
+
+                List<CalendarActivity> newList = new ArrayList<>(OldListByDate);
+                newList.add(activity);
+                calendarActivityMap.put(activityDate, newList);
             }
         }
+        return  calendarActivityMap;
     }
 }
 

@@ -1,6 +1,7 @@
 package com.example.cursjavafx;
 
 import com.example.cursjavafx.database.PostgreDB;
+import com.example.cursjavafx.utils.Scenes;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -32,5 +33,9 @@ public class AddAnimalController implements Initializable {
 
     public void addAnimal(ActionEvent event) {
         db.createAnimal(name.getText(), choiceKindList.getValue(), date.getValue(), event);
+    }
+
+    public void backOnMain(ActionEvent event) {
+        Scenes.MAIN.switchScene(event);
     }
 }

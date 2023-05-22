@@ -62,10 +62,6 @@ public class AnimalController implements Initializable {
     }
 
     public void switchToMain(ActionEvent event) {
-        try {
-            new SceneController().switchScene(event, Scenes.MAIN.getTitle());
-        } catch (IOException error) {
-            error.printStackTrace();
-        }
+        Scenes.MAIN.switchScene(event);
     }
 }

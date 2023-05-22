@@ -15,11 +15,7 @@ public class LoginController {
 
     @FXML
     protected void switchToRegPage(ActionEvent event) {
-        try {
-            new SceneController().switchScene(event, Scenes.REGISTRATION.getTitle());
-        } catch (IOException error) {
-            error.printStackTrace();
-        }
+        Scenes.REGISTRATION.switchScene(event);
     }
 
     public void login(ActionEvent event) {

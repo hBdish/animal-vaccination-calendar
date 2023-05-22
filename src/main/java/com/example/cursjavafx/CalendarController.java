@@ -2,6 +2,7 @@ package com.example.cursjavafx;
 
 import com.example.cursjavafx.classes.CalendarActivity;
 import com.example.cursjavafx.database.PostgreDB;
+import com.example.cursjavafx.utils.Scenes;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -14,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+import java.io.IOException;
 import java.net.URL;
 import java.time.ZonedDateTime;
 import java.util.*;
@@ -148,13 +150,17 @@ public class CalendarController implements Initializable {
             text.setOnMouseClicked(mouseEvent -> {
                 System.out.println(text.getText());
             });
+
+
         }
         calendarActivityBox.setTranslateY((rectangleHeight / 2) * 0.20);
         calendarActivityBox.setMaxWidth(rectangleWidth * 0.8);
         calendarActivityBox.setMaxHeight(rectangleHeight * 0.65);
-
-
         stackPane.getChildren().add(calendarActivityBox);
+    }
+
+    public void backToMain(ActionEvent event) {
+        Scenes.MAIN.switchScene(event);
     }
 }
 

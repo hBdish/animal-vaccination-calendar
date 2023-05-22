@@ -2,7 +2,6 @@ package com.example.cursjavafx.database;
 
 import com.example.cursjavafx.classes.Animal;
 import com.example.cursjavafx.HelloApplication;
-import com.example.cursjavafx.SceneController;
 import com.example.cursjavafx.classes.CalendarActivity;
 import com.example.cursjavafx.classes.EventsAnimals;
 import com.example.cursjavafx.utils.Scenes;
@@ -10,7 +9,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-import java.io.IOException;
+
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
@@ -82,11 +81,7 @@ public class PostgreDB {
                     String pass = resultSet.getString("password");
 
                     if (log.equals(login) && pass.equals(password)) {
-                        try {
-                            new SceneController().switchScene(event, Scenes.MAIN.getTitle());
-                        } catch (IOException error) {
-                            error.printStackTrace();
-                        }
+                        Scenes.MAIN.switchScene(event);
                     } else {
                         System.out.println("Login or password did not match!");
                         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -212,15 +207,11 @@ public class PostgreDB {
 
             try {
                 connection.close();
+                Scenes.MAIN.switchScene(event);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
 
-            try {
-                new SceneController().switchScene(event, Scenes.MAIN.getTitle());
-            } catch (IOException error) {
-                error.printStackTrace();
-            }
         }
     }
 
@@ -240,13 +231,9 @@ public class PostgreDB {
         } finally {
             try {
                 connection.close();
+                Scenes.MAIN.switchScene(event);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
-            }
-            try {
-                new SceneController().switchScene(event, Scenes.MAIN.getTitle());
-            } catch (IOException error) {
-                error.printStackTrace();
             }
         }
     }
@@ -318,11 +305,7 @@ public class PostgreDB {
                 throw new RuntimeException(e);
             }
 
-            try {
-                new SceneController().switchScene(event, Scenes.ANIMAL_EVENTS.getTitle());
-            } catch (IOException error) {
-                error.printStackTrace();
-            }
+            Scenes.ANIMAL_EVENTS.switchScene(event);
         }
     }
 
@@ -342,14 +325,11 @@ public class PostgreDB {
         } finally {
             try {
                 connection.close();
+                Scenes.ANIMAL_EVENTS.switchScene(event);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-            try {
-                new SceneController().switchScene(event, Scenes.ANIMAL_EVENTS.getTitle());
-            } catch (IOException error) {
-                error.printStackTrace();
-            }
+
         }
     }
 
@@ -367,7 +347,7 @@ public class PostgreDB {
                 "WHERE users.id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, 1);
+            pst.setInt(1, HelloApplication.idUser);
             resultSet = pst.executeQuery();
 
             try {

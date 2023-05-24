@@ -59,6 +59,7 @@ public class MainController implements Initializable {
             Animal animal = animalTable.getSelectionModel().getSelectedItems().get(0);
             HelloApplication.idAnimal = animal.getId();
             HelloApplication.nameAnimal = animal.getName();
+            HelloApplication.kindAnimal = animal.getKind();
             Scenes.ANIMAL_EVENTS.switchScene(event);
     }
 

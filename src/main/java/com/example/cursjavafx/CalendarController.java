@@ -150,13 +150,12 @@ public class CalendarController implements Initializable {
             text.setOnMouseClicked(mouseEvent -> {
                 System.out.println(text.getText());
             });
-
-
+            calendarActivityBox.setTranslateY((rectangleHeight / 2) * 0.20);
+            calendarActivityBox.setMaxWidth(rectangleWidth * 0.8);
+            calendarActivityBox.setMaxHeight(rectangleHeight * 0.65);
         }
-        calendarActivityBox.setTranslateY((rectangleHeight / 2) * 0.20);
-        calendarActivityBox.setMaxWidth(rectangleWidth * 0.8);
-        calendarActivityBox.setMaxHeight(rectangleHeight * 0.65);
         stackPane.getChildren().add(calendarActivityBox);
+
     }
 
     public void backToMain(ActionEvent event) {

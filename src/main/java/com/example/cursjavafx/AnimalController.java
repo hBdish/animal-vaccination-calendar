@@ -1,8 +1,12 @@
 package com.example.cursjavafx;
 
 import com.example.cursjavafx.classes.EventsAnimals;
+import com.example.cursjavafx.classes.Pills;
 import com.example.cursjavafx.database.PostgreDB;
 import com.example.cursjavafx.utils.Scenes;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -11,10 +15,13 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.MouseDragEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
 
@@ -37,18 +44,54 @@ public class AnimalController implements Initializable {
     public DatePicker date_start_event;
     @FXML
     public DatePicker date_end_event;
+
+
+ 
+
+    public TableView<Pills> pillsTable;
+    public TableColumn<Pills, Integer> id_pills;
+    public TableColumn<Pills, String> name_pills;
+    public TableColumn<Pills, Integer> days_pills;
+    public ChoiceBox<String> prescribing;
+    public DatePicker date_start_pills;
+
     PostgreDB db = new PostgreDB();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         idLable.setText(HelloApplication.nameAnimal);
+        ObservableList<String> dataPrescribing = db.getPrescribing();
 
+        prescribing.setItems(dataPrescribing);
+        prescribing.setValue(dataPrescribing.get(0));
+        HelloApplication.prescribing = dataPrescribing.get(0);
+
+        prescribing.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                HelloApplication.prescribing = prescribing.getItems().get((Integer) newValue);
+                setTable(db);
+            }
+        });
+
+        setTable(db);
+
+    }
+
+    public void setTable(PostgreDB db) {
         id.setCellValueFactory(new PropertyValueFactory<>("id"));
         name.setCellValueFactory(new PropertyValueFactory<>("name"));
         date_start.setCellValueFactory(new PropertyValueFactory<>("date_start"));
         date_end.setCellValueFactory(new PropertyValueFactory<>("date_end"));
 
+
+        id_pills.setCellValueFactory(new PropertyValueFactory<>("id"));
+        name_pills.setCellValueFactory(new PropertyValueFactory<>("name"));
+        days_pills.setCellValueFactory(new PropertyValueFactory<>("days"));
+
+
         eventTable.setItems(db.getEvents());
+        pillsTable.setItems(db.getPills());
     }
 
     public void addEvent(ActionEvent event) {
@@ -63,5 +106,22 @@ public class AnimalController implements Initializable {
 
     public void switchToMain(ActionEvent event) {
         Scenes.MAIN.switchScene(event);
+    }
+
+
+    public void addPills(ActionEvent event) {
+        Pills pills = pillsTable.getSelectionModel().getSelectedItem();
+        LocalDate dateStart = date_start_pills.getValue();
+        LocalDate dateEnd = calcDateEnd(dateStart, pills.getDays());
+        db.createEvent(pills.getName(), dateStart, dateEnd, event);
+
+    }
+
+    private LocalDate calcDateEnd(LocalDate dateStart ,int days) {
+        Date date = new Date(dateStart.getYear(), dateStart.getMonthValue(), dateStart.getDayOfMonth());
+        date.setDate(date.getDate() + days);
+        LocalDate dateEnd = LocalDate.of(date.getYear(), date.getMonth() + 1, date.getDay() + 18);
+
+        return dateEnd;
     }
 }

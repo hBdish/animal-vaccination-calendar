@@ -4,6 +4,7 @@ import com.example.cursjavafx.classes.Animal;
 import com.example.cursjavafx.HelloApplication;
 import com.example.cursjavafx.classes.CalendarActivity;
 import com.example.cursjavafx.classes.EventsAnimals;
+import com.example.cursjavafx.classes.Pills;
 import com.example.cursjavafx.utils.Scenes;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -422,6 +423,110 @@ public class PostgreDB {
             }
         }
         return  calendarActivityMap;
+    }
+
+    public ObservableList<Pills> getPills() {
+        setConnection();
+
+        ObservableList<Pills> data = FXCollections.observableArrayList();
+        ResultSet resultSet;
+        String queryKind = "SELECT id FROM kinds WHERE kind = ?";
+        String queryPrescribing = "SELECT id FROM prescribing WHERE prescribing = ?";
+        String queryPills = "SELECT * FROM pils WHERE kind_id = ? AND prescribing_id = ?";
+
+        int kind_id = 0;
+        int prescribing_id = 0;
+
+        try (PreparedStatement pst = connection.prepareStatement(queryKind)) {
+            pst.setString(1, HelloApplication.kindAnimal);
+            resultSet = pst.executeQuery();
+
+            try {
+                while (resultSet.next()) {
+                    kind_id = resultSet.getInt("id");
+                }
+            } catch (SQLException error) {
+                System.out.println(error.getMessage());
+            }
+        } catch (SQLException error) {
+            Logger logger = Logger.getLogger(PostgreDB.class.getName());
+            logger.log(Level.SEVERE, error.getMessage(), error);
+        }
+
+        try (PreparedStatement pst = connection.prepareStatement(queryPrescribing)) {
+            pst.setString(1, HelloApplication.prescribing);
+            resultSet = pst.executeQuery();
+
+            try {
+                while (resultSet.next()) {
+                    prescribing_id = resultSet.getInt("id");
+                }
+            } catch (SQLException error) {
+                System.out.println(error.getMessage());
+            }
+        } catch (SQLException error) {
+            Logger logger = Logger.getLogger(PostgreDB.class.getName());
+            logger.log(Level.SEVERE, error.getMessage(), error);
+        }
+
+        try (PreparedStatement pst = connection.prepareStatement(queryPills)) {
+            pst.setInt(1, kind_id);
+            pst.setInt(2, prescribing_id);
+            resultSet = pst.executeQuery();
+
+            if (!resultSet.isBeforeFirst()) {
+                System.out.println("pills res empty");
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setContentText("pills res empty");
+                alert.show();
+            } else {
+                System.out.println("pills not empty");
+            }
+
+            try {
+                while (resultSet.next()) {
+                    Pills pills =
+                            new Pills(
+                                    resultSet.getInt("id"),
+                                    resultSet.getString("name"),
+                                    resultSet.getInt("days")
+                            );
+                    data.add(pills);
+                }
+            } catch (SQLException error) {
+                System.out.println(error.getMessage());
+            }
+        } catch (SQLException error) {
+            Logger logger = Logger.getLogger(PostgreDB.class.getName());
+            logger.log(Level.SEVERE, error.getMessage(), error);
+
+        }
+        return data;
+
+    }
+
+    public ObservableList<String> getPrescribing() {
+        setConnection();
+
+        ObservableList<String> data = FXCollections.observableArrayList();
+        ResultSet resultSet;
+        String query = "SELECT * FROM prescribing";
+
+        try (PreparedStatement pst = connection.prepareStatement(query)) {
+            resultSet = pst.executeQuery();
+
+            try {
+                while (resultSet.next()) {
+                    data.add(resultSet.getString("prescribing"));
+                }
+            } catch (SQLException error) {
+                System.out.println(error.getMessage());
+            }
+        } catch (SQLException error) {
+            Logger logger = Logger.getLogger(PostgreDB.class.getName());
+            logger.log(Level.SEVERE, error.getMessage(), error);
+        }
+        return data;
     }
 }
 

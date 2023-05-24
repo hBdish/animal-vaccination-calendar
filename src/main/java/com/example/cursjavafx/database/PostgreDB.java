@@ -250,15 +250,6 @@ public class PostgreDB {
             pst.setInt(1, HelloApplication.idAnimal);
             resultSet = pst.executeQuery();
 
-            if (!resultSet.isBeforeFirst()) {
-                System.out.println("event res empty");
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("event res empty");
-                alert.show();
-            } else {
-                System.out.println("animal not empty");
-            }
-
             try {
                 while (resultSet.next()) {
                     EventsAnimals event =
@@ -473,15 +464,6 @@ public class PostgreDB {
             pst.setInt(1, kind_id);
             pst.setInt(2, prescribing_id);
             resultSet = pst.executeQuery();
-
-            if (!resultSet.isBeforeFirst()) {
-                System.out.println("pills res empty");
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("pills res empty");
-                alert.show();
-            } else {
-                System.out.println("pills not empty");
-            }
 
             try {
                 while (resultSet.next()) {

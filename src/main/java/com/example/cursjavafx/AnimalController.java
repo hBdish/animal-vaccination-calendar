@@ -44,15 +44,17 @@ public class AnimalController implements Initializable {
     public DatePicker date_start_event;
     @FXML
     public DatePicker date_end_event;
-
-
- 
-
+    @FXML
     public TableView<Pills> pillsTable;
+    @FXML
     public TableColumn<Pills, Integer> id_pills;
+    @FXML
     public TableColumn<Pills, String> name_pills;
+    @FXML
     public TableColumn<Pills, Integer> days_pills;
+    @FXML
     public ChoiceBox<String> prescribing;
+    @FXML
     public DatePicker date_start_pills;
 
     PostgreDB db = new PostgreDB();
@@ -120,7 +122,7 @@ public class AnimalController implements Initializable {
     private LocalDate calcDateEnd(LocalDate dateStart ,int days) {
         Date date = new Date(dateStart.getYear(), dateStart.getMonthValue(), dateStart.getDayOfMonth());
         date.setDate(date.getDate() + days);
-        LocalDate dateEnd = LocalDate.of(date.getYear(), date.getMonth() + 1, date.getDay() + 18);
+        LocalDate dateEnd = LocalDate.of(date.getYear(), date.getMonth() + 1, date.getDay() + 16);
 
         return dateEnd;
     }

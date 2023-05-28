@@ -73,7 +73,7 @@ public class PostgreDB {
             if (!resultSet.isBeforeFirst()) {
                 System.out.println("User not found in the database");
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setContentText("Incorrect");
+                alert.setContentText("Неверный логин или пароль");
                 alert.show();
             } else {
                 while (resultSet.next()) {
@@ -169,7 +169,7 @@ public class PostgreDB {
         return data;
     }
 
-    public void createAnimal(String name, String kind, LocalDate date, ActionEvent event) {
+    public void createAnimal(String name, String kind, LocalDate date, ActionEvent event, Boolean reglament) {
         setConnection();
 
         int kind_id = -1;
@@ -177,6 +177,8 @@ public class PostgreDB {
 
         String query = "SELECT id FROM kinds WHERE kind = ?";
         String query2 = "INSERT INTO animals(name, kind_id, date_birth, user_id) VALUES(?, ?, ?, ?)";
+        String queryIdAnimal = "SELECT id FROM animals WHERE user_id = ? AND name = ? AND date_birth = ?";
+        String queryReglament = "SELECT * FROM reglament WHERE kind_id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setString(1, kind);
@@ -204,16 +206,62 @@ public class PostgreDB {
         } catch (SQLException error) {
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
-        } finally {
+        }finally {
+            if (reglament) {
 
-            try {
-                connection.close();
-                Scenes.MAIN.switchScene(event);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
+                try (PreparedStatement pst = connection.prepareStatement(queryIdAnimal)) {
+                    pst.setInt(1, HelloApplication.idUser);
+                    pst.setString(2, name);
+                    pst.setDate(3, Date.valueOf(date));
+                    resultSet = pst.executeQuery();
+
+                    try {
+                        while (resultSet.next()) {
+                            HelloApplication.idAnimal = resultSet.getInt("id");
+                        }
+                    } catch (SQLException error) {
+                        System.out.println(error.getMessage());
+                    }
+                } catch (SQLException error) {
+                    Logger logger = Logger.getLogger(PostgreDB.class.getName());
+                    logger.log(Level.SEVERE, error.getMessage(), error);
+                }
+
+
+                try (PreparedStatement pst = connection.prepareStatement(queryReglament)) {
+                    pst.setInt(1, kind_id);
+                    resultSet = pst.executeQuery();
+
+                    try {
+                        while (resultSet.next()) {
+                            System.out.println(resultSet.getString("name"));
+                            createEventreglament(
+                                    resultSet.getString("name"),
+                                    calcDateEnd(date, resultSet.getInt("daysStart")),
+                                    calcDateEnd(calcDateEnd(date, resultSet.getInt("daysStart")),resultSet.getInt("days"))
+                            );
+                        }
+                    } catch (SQLException error) {
+                        System.out.println(error.getMessage());
+                    }
+
+                } catch (SQLException error) {
+                    Logger logger = Logger.getLogger(PostgreDB.class.getName());
+                    logger.log(Level.SEVERE, error.getMessage(), error);
+                } finally {
+                    try {
+                        connection.close();
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    Scenes.MAIN.switchScene(event);
+                }
             }
-
         }
+
+
+
+
     }
 
     public void deleteAnimal(int id, ActionEvent event) {
@@ -290,7 +338,6 @@ public class PostgreDB {
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
         } finally {
-
             try {
                 connection.close();
             } catch (SQLException e) {
@@ -298,6 +345,25 @@ public class PostgreDB {
             }
 
             Scenes.ANIMAL_EVENTS.switchScene(event);
+        }
+    }
+
+    public void createEventreglament(String name, LocalDate date_start, LocalDate date_end) {
+
+        ResultSet resultSet;
+        String query1 = "INSERT INTO events(name, date_start, date_end, animal_id) VALUES(?, ?, ?, ?)";
+
+
+        try (PreparedStatement pst = connection.prepareStatement(query1)) {
+            pst.setString(1, name);
+            pst.setDate(2, Date.valueOf(date_start));
+            pst.setDate(3, Date.valueOf(date_end));
+            pst.setInt(4, HelloApplication.idAnimal);
+            pst.executeUpdate();
+            System.out.println("success created event");
+        } catch (SQLException error) {
+            Logger logger = Logger.getLogger(PostgreDB.class.getName());
+            logger.log(Level.SEVERE, error.getMessage(), error);
         }
     }
 
@@ -509,6 +575,14 @@ public class PostgreDB {
             logger.log(Level.SEVERE, error.getMessage(), error);
         }
         return data;
+    }
+
+    private LocalDate calcDateEnd(LocalDate dateStart ,int days) {
+        java.util.Date date = new java.util.Date(dateStart.getYear(), dateStart.getMonthValue(), dateStart.getDayOfMonth());
+        date.setDate(date.getDate() + days);
+        LocalDate dateEnd = LocalDate.of(date.getYear(), date.getMonth() + 1, date.getDay() + 16);
+
+        return dateEnd;
     }
 }
 

@@ -5,19 +5,38 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
 <VBox alignment="CENTER" prefHeight="377.0" prefWidth="382.0" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cursjavafx.LoginController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
-   <TextField fx:id="login">
-      <cursor>
-         <Cursor fx:constant="TEXT" />
-      </cursor></TextField>
-   <TextField fx:id="password">
-      <cursor>
-         <Cursor fx:constant="TEXT" />
-      </cursor></TextField>
-   <Button mnemonicParsing="false" onAction="#login" text="Войти" styleClass="btn, btn-success"/>
+   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Авторизация">
+      <font>
+         <Font size="22.0" />
+      </font>
+   </Text>
+   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="342.0" spacing="4.0">
+      <children>
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Введите логин" wrappingWidth="92.22412109375" />
+         <TextField fx:id="login">
+            <cursor>
+               <Cursor fx:constant="TEXT" />
+            </cursor>
+         </TextField>
+      </children>
+   </VBox>
+   <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="4.0">
+      <children>
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Введите пароль" />
+         <TextField fx:id="password">
+            <cursor>
+               <Cursor fx:constant="TEXT" />
+            </cursor>
+         </TextField>
+      </children>
+   </VBox>
+   <Button mnemonicParsing="false" onAction="#login" styleClass="btn, btn-success" text="Войти" />
     <Button onAction="#switchToRegPage" styleClass="btn, btn-info" text="Зарегистрироваться" />
 </VBox>

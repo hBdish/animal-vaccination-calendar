@@ -1,19 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="756.0" prefWidth="641.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cursjavafx.AnimalController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="756.0" prefWidth="641.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cursjavafx.AnimalController">
    <children>
       <Label fx:id="idLable" alignment="CENTER" contentDisplay="CENTER" layoutX="237.0" layoutY="12.0" prefHeight="51.0" prefWidth="137.0" text="КЛИЧКА">
          <font>
@@ -25,7 +16,7 @@
             <TableColumn fx:id="id" prefWidth="48.25062942504883" text="id" />
             <TableColumn fx:id="name" prefWidth="245.74933624267578" text="Название" />
             <TableColumn fx:id="date_start" prefWidth="125.0" text="Дата начала" />
-            <TableColumn fx:id="date_end" prefWidth="128.50003051757812" text="Дата окончания" />
+            <TableColumn fx:id="date_end" prefWidth="128.50003051757812" text="Дата повтора" />
         </columns>
       </TableView>
       <Separator layoutX="5.0" layoutY="318.0" prefHeight="0.0" prefWidth="626.0" />

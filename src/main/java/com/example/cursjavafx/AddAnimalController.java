@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -22,6 +23,7 @@ public class AddAnimalController implements Initializable {
     public TextField name;
     @FXML
     public DatePicker date;
+    public CheckBox idReglament;
 
     PostgreDB db = new PostgreDB();
 
@@ -32,7 +34,7 @@ public class AddAnimalController implements Initializable {
     }
 
     public void addAnimal(ActionEvent event) {
-        db.createAnimal(name.getText(), choiceKindList.getValue(), date.getValue(), event);
+        db.createAnimal(name.getText(), choiceKindList.getValue(), date.getValue(), event, idReglament.isSelected());
     }
 
     public void backOnMain(ActionEvent event) {

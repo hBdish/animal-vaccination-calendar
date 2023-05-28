@@ -4,29 +4,54 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" prefHeight="335.0" prefWidth="379.0" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cursjavafx.RegistrationController">
-   <TextField fx:id="name" prefHeight="26.0" prefWidth="544.0">
-      <opaqueInsets>
-         <Insets />
-      </opaqueInsets>
-      <VBox.margin>
-         <Insets left="12.0" right="12.0" />
-      </VBox.margin></TextField>
-   <TextField fx:id="login">
-      <opaqueInsets>
-         <Insets />
-      </opaqueInsets>
-      <VBox.margin>
-         <Insets left="12.0" right="12.0" />
-      </VBox.margin></TextField>
-   <TextField fx:id="password">
-      <opaqueInsets>
-         <Insets />
-      </opaqueInsets>
-      <VBox.margin>
-         <Insets left="12.0" right="12.0" />
-      </VBox.margin></TextField>
+<VBox alignment="CENTER" prefHeight="403.0" prefWidth="379.0" spacing="10.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.cursjavafx.RegistrationController">
+   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Регистрация" textAlignment="CENTER">
+      <font>
+         <Font size="22.0" />
+      </font>
+   </Text>
+   <VBox alignment="CENTER" prefHeight="73.0" prefWidth="379.0" spacing="4.0">
+      <children>
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Введите имя пользовтеля" />
+         <TextField fx:id="name" prefHeight="26.0" prefWidth="544.0">
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+            <VBox.margin>
+               <Insets left="12.0" right="12.0" />
+            </VBox.margin>
+         </TextField>
+      </children>
+   </VBox>
+   <VBox alignment="CENTER" prefHeight="75.0" prefWidth="379.0" spacing="4.0">
+      <children>
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Введите логин" />
+         <TextField fx:id="login">
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+            <VBox.margin>
+               <Insets left="12.0" right="12.0" />
+            </VBox.margin>
+         </TextField>
+      </children>
+   </VBox>
+   <VBox alignment="CENTER" prefHeight="82.0" prefWidth="379.0" spacing="4.0">
+      <children>
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Введите пароль" />
+         <TextField fx:id="password">
+            <opaqueInsets>
+               <Insets />
+            </opaqueInsets>
+            <VBox.margin>
+               <Insets left="12.0" right="12.0" />
+            </VBox.margin>
+         </TextField>
+      </children>
+   </VBox>
     <Button onAction="#onMainButtonClick" styleClass="btn, btn-primary" text="Зарегистрироваться" />
    <Button onAction="#switchToLoginPage" text="Войти" />
 </VBox>

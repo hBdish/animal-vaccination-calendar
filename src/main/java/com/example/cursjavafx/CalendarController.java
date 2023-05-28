@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.StackPane;
@@ -149,6 +150,8 @@ public class CalendarController implements Initializable {
             calendarActivityBox.getChildren().add(text);
             text.setOnMouseClicked(mouseEvent -> {
                 System.out.println(text.getText());
+                Alert alert = new Alert(Alert.AlertType.INFORMATION, text.getText());
+                alert.show();
             });
             calendarActivityBox.setTranslateY((rectangleHeight / 2) * 0.20);
             calendarActivityBox.setMaxWidth(rectangleWidth * 0.8);

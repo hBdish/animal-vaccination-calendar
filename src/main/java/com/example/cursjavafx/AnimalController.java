@@ -57,12 +57,12 @@ public class AnimalController implements Initializable {
     @FXML
     public DatePicker date_start_pills;
 
-    PostgreDB db = new PostgreDB();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         idLable.setText(HelloApplication.nameAnimal);
-        ObservableList<String> dataPrescribing = db.getPrescribing();
+        ObservableList<String> dataPrescribing = PostgreDB.bd.getPrescribing();
 
         prescribing.setItems(dataPrescribing);
         prescribing.setValue(dataPrescribing.get(0));
@@ -72,11 +72,11 @@ public class AnimalController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 HelloApplication.prescribing = prescribing.getItems().get((Integer) newValue);
-                setTable(db);
+                setTable(PostgreDB.bd);
             }
         });
 
-        setTable(db);
+        setTable(PostgreDB.bd);
 
     }
 
@@ -95,13 +95,13 @@ public class AnimalController implements Initializable {
     }
 
     public void addEvent(ActionEvent event) {
-        db.createEvent(name_event.getText(), date_start_event.getValue(), date_end_event.getValue(), event);
+        PostgreDB.bd.createEvent(name_event.getText(), date_start_event.getValue(), date_end_event.getValue(), event);
         System.out.println(HelloApplication.idAnimal);
     }
 
     public void deleteEvent(ActionEvent event) {
         EventsAnimals eventsAnimals = eventTable.getSelectionModel().getSelectedItem();
-        db.deleteEvent(eventsAnimals.getId(), event);
+        PostgreDB.bd.deleteEvent(eventsAnimals.getId(), event);
     }
 
     public void switchToMain(ActionEvent event) {
@@ -113,7 +113,7 @@ public class AnimalController implements Initializable {
         Pills pills = pillsTable.getSelectionModel().getSelectedItem();
         LocalDate dateStart = date_start_pills.getValue();
         LocalDate dateEnd = calcDateEnd(dateStart, pills.getDays());
-        db.createEvent(pills.getName(), dateStart, dateEnd, event);
+        PostgreDB.bd.createEvent(pills.getName(), dateStart, dateEnd, event);
 
     }
 

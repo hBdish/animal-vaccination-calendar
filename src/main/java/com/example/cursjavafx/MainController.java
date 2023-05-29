@@ -33,8 +33,7 @@ public class MainController implements Initializable {
     public TableColumn<Animal, String> animalKind;
     @FXML
     public TableColumn<Animal, Date> animalDateB;
-    private ObservableList<Animal> data = FXCollections.observableArrayList();
-    PostgreDB db = new PostgreDB();
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -43,7 +42,7 @@ public class MainController implements Initializable {
         animalKind.setCellValueFactory(new PropertyValueFactory<>("kind"));
         animalDateB.setCellValueFactory(new PropertyValueFactory<>("date_birth"));
 
-        animalTable.setItems(db.getAnimals());
+        animalTable.setItems(PostgreDB.bd.getAnimals());
     }
 
     public void openAddAnimal(ActionEvent event) throws IOException {
@@ -52,7 +51,7 @@ public class MainController implements Initializable {
 
     public void delete(ActionEvent event) {
         Animal animal = animalTable.getSelectionModel().getSelectedItems().get(0);
-        db.deleteAnimal(animal.getId(), event);
+        PostgreDB.bd.deleteAnimal(animal.getId(), event);
     }
 
     public void openAnimal(ActionEvent event) {

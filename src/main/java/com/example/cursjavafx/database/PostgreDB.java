@@ -28,6 +28,8 @@ import java.util.logging.Logger;
  */
 
 public class PostgreDB {
+    public static final PostgreDB bd = new PostgreDB();
+
     /**
      * строка подключения к серверу базы данных
      */
@@ -472,10 +474,11 @@ public class PostgreDB {
                 "JOIN animals ON users.id = animals.user_id\n" +
                 "JOIN kinds ON animals.kind_id = kinds.id\n" +
                 "JOIN events ON animals.id = events.animal_id\n" +
-                "WHERE users.id = ?";
+                "WHERE users.id = ? AND animals.id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
             pst.setInt(1, HelloApplication.idUser);
+            pst.setInt(2, HelloApplication.idAnimal);
             resultSet = pst.executeQuery();
 
             try {

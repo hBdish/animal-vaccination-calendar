@@ -10,14 +10,10 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class LoginController {
-
     public TextField login;
     public TextField password;
-    PostgreDB db;
-
-    String regexPassword = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$";
-    String regexLogin = "^[a-zA-Z][a-zA-Z0-9-_\\.]{4,20}$";
-
+    private String regexPassword = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$";
+    private String regexLogin = "^[a-zA-Z][a-zA-Z0-9-_\\.]{4,20}$";
     @FXML
     protected void switchToRegPage(ActionEvent event) {
         Scenes.REGISTRATION.switchScene(event);
@@ -25,8 +21,7 @@ public class LoginController {
 
     public void login(ActionEvent event) {
         if (Pattern.matches(regexPassword, password.getText()) && Pattern.matches(regexLogin, login.getText())) {
-            db = new PostgreDB();
-            db.loginUser(login.getText(), password.getText(), event);
+            PostgreDB.bd.loginUser(login.getText(), password.getText(), event);
         } else {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Некорректный логин или пароль");
             alert.show();

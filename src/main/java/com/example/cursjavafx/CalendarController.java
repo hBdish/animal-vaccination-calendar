@@ -24,14 +24,9 @@ import java.util.*;
 public class CalendarController implements Initializable {
     public Text year;
     public Text month;
-    PostgreDB db = new PostgreDB();
-
     ZonedDateTime dateFocus;
     ZonedDateTime today;
-//    @FXML
-//    public Label month;
-//    @FXML
-//    public Label year;
+
     @FXML
     public FlowPane calendar;
 
@@ -64,7 +59,7 @@ public class CalendarController implements Initializable {
         double spacingH = calendar.getHgap();
         double spacingV = calendar.getVgap();
 
-        Map<Integer, List<CalendarActivity>> calendarActivityMap = db.getCalendarActivitiesMonth(dateFocus);
+        Map<Integer, List<CalendarActivity>> calendarActivityMap = PostgreDB.bd.getCalendarActivitiesMonth(dateFocus);
 
         int monthMaxDate = dateFocus.getMonth().maxLength();
 

@@ -6,6 +6,10 @@ import javafx.event.ActionEvent;
 import java.io.IOException;
 
 public enum Scenes {
+
+    /**
+     * Список всех окон
+     */
     LOGIN ("login-view.fxml"),
     MAIN("main-view.fxml"),
     ADD_ANIMAL("addAnimal.fxml"),
@@ -23,6 +27,10 @@ public enum Scenes {
         return title;
     }
 
+    /**
+     * Функция смены окна
+     * @param event событие нажатия на кнопку
+     */
     public void switchScene(ActionEvent event) {
         try {
             new SceneController().switchScene(event, this.title);

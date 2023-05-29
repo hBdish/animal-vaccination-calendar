@@ -20,12 +20,34 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Класс подключения к базе данных
+ * <p>
+ * Содержит:
+ * Методы взаимодействия с базой данных
+ */
+
 public class PostgreDB {
+    /**
+     * строка подключения к серверу базы данных
+     */
     static final String DB_URL = "jdbc:postgresql://localhost:5432/java";
+    /**
+     * строка с именем пользователя для подключения к серверу базы данных
+     */
     static final String USER = "postgres";
+    /**
+     * строка с паролем для подключения к серверу базы данных
+     */
     static final String PASS = "1";
+    /**
+     * поле содержащее сессию подключения к серверу базы данных
+     */
     private Connection connection = null;
 
+    /**
+     * функция установки соединения с сервером базы данных
+     */
     private void setConnection() {
         try {
             this.connection = DriverManager
@@ -36,6 +58,12 @@ public class PostgreDB {
         }
     }
 
+    /**
+     * функция создания нового пользователя
+     * @param name имя пользователя
+     * @param login логин пользователя
+     * @param password пароль пользователя
+     */
     public void createUser(String name, String login, String password) {
         setConnection();
         String query = "INSERT INTO users(name, login, password) VALUES(?, ?, ?)";
@@ -59,9 +87,14 @@ public class PostgreDB {
         }
     }
 
+    /**
+     * функция авторизации пользователя
+     * @param login логин пользователя
+     * @param password пароль пользователя
+     * @param event событие нажатия на кнопку
+     */
     public void loginUser(String login, String password, ActionEvent event) {
         setConnection();
-
 
         String query = "SELECT * FROM users WHERE login = ? AND password = ?";
         ResultSet resultSet;
@@ -103,6 +136,10 @@ public class PostgreDB {
         }
     }
 
+    /**
+     * функция получения списка животных
+     * @return список животных
+     */
     public ObservableList<Animal> getAnimals() {
         setConnection();
 
@@ -144,7 +181,10 @@ public class PostgreDB {
         }
         return data;
     }
-
+    /**
+     * функция получения списка видов животных
+     * @return список видов животных
+     */
     public ObservableList<String> getKinds() {
         setConnection();
 
@@ -169,6 +209,14 @@ public class PostgreDB {
         return data;
     }
 
+    /**
+     * функция создания нового животного
+     * @param name кличка животного
+     * @param kind вид животного
+     * @param date дата рождения животного
+     * @param event событие нажатия на кнопку
+     * @param reglament булевое значение, определяющее необходимость учета регламента при создании животного
+     */
     public void createAnimal(String name, String kind, LocalDate date, ActionEvent event, Boolean reglament) {
         setConnection();
 
@@ -258,12 +306,12 @@ public class PostgreDB {
                 }
             }
         }
-
-
-
-
     }
 
+    /**
+     * функция удаления животного
+     * @param id id животного
+     */
     public void deleteAnimal(int id, ActionEvent event) {
         setConnection();
 
@@ -287,6 +335,10 @@ public class PostgreDB {
         }
     }
 
+    /**
+     * функция получения списка мероприятий
+     * @return список мероприятий
+     */
     public ObservableList<EventsAnimals> getEvents() {
         setConnection();
 
@@ -315,17 +367,22 @@ public class PostgreDB {
         } catch (SQLException error) {
             Logger logger = Logger.getLogger(PostgreDB.class.getName());
             logger.log(Level.SEVERE, error.getMessage(), error);
-
         }
         return data;
     }
 
+    /**
+     * функция создания нового мероприятия
+     * @param name название мероприятия
+     * @param date_start дата начала мероприятия
+     * @param date_end дата конца мероприятия
+     * @param event событие нажатия на кнопку
+     */
     public void createEvent(String name, LocalDate date_start, LocalDate date_end, ActionEvent event) {
         setConnection();
 
         ResultSet resultSet;
         String query1 = "INSERT INTO events(name, date_start, date_end, animal_id) VALUES(?, ?, ?, ?)";
-
 
         try (PreparedStatement pst = connection.prepareStatement(query1)) {
             pst.setString(1, name);
@@ -348,11 +405,16 @@ public class PostgreDB {
         }
     }
 
+    /**
+     * функция добавления мероприятия из регламента
+     * @param name название мероприятия
+     * @param date_start дата начала мероприятия
+     * @param date_end дата конца мероприятия
+     */
     public void createEventreglament(String name, LocalDate date_start, LocalDate date_end) {
 
         ResultSet resultSet;
         String query1 = "INSERT INTO events(name, date_start, date_end, animal_id) VALUES(?, ?, ?, ?)";
-
 
         try (PreparedStatement pst = connection.prepareStatement(query1)) {
             pst.setString(1, name);
@@ -367,6 +429,10 @@ public class PostgreDB {
         }
     }
 
+    /**
+     * функция удаления мероприятия
+     * @param id id мероприятия
+     */
     public void deleteEvent(int id, ActionEvent event) {
         setConnection();
 
@@ -387,10 +453,14 @@ public class PostgreDB {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-
         }
     }
 
+    /**
+     * функция получения списка мероприятий в месяце
+     * @param dateFocus дата
+     * @return список мероприятий на месяц
+     */
     public Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(ZonedDateTime dateFocus) {
         setConnection();
 
@@ -451,7 +521,6 @@ public class PostgreDB {
                     ) {
                         calendarActivities.add(new CalendarActivity(timeEnd, event_name, animal_name, false));
                     }
-
                 }
             } catch (SQLException error) {
                 System.out.println(error.getMessage());
@@ -464,6 +533,11 @@ public class PostgreDB {
         return createCalendarMap(calendarActivities);
     }
 
+    /**
+     * функция создания списка мароприятий
+     * @param calendarActivities календарь активностей на месяц
+     * @return список мароприятий
+     */
     private Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> calendarActivities) {
         Map<Integer, List<CalendarActivity>> calendarActivityMap = new HashMap<>();
 
@@ -473,7 +547,6 @@ public class PostgreDB {
                 calendarActivityMap.put(activityDate, List.of(activity));
             } else {
                 List<CalendarActivity> OldListByDate = calendarActivityMap.get(activityDate);
-
                 List<CalendarActivity> newList = new ArrayList<>(OldListByDate);
                 newList.add(activity);
                 calendarActivityMap.put(activityDate, newList);
@@ -482,6 +555,10 @@ public class PostgreDB {
         return  calendarActivityMap;
     }
 
+    /**
+     * функция получения списка мероприятий для определенного вида животных
+     * @return список мероприятий для определенного вида животных
+     */
     public ObservableList<Pills> getPills() {
         setConnection();
 
@@ -553,6 +630,10 @@ public class PostgreDB {
 
     }
 
+    /**
+     * функция получения списка видов мероприятий
+     * @return список видов мероприятий
+     */
     public ObservableList<String> getPrescribing() {
         setConnection();
 
@@ -577,6 +658,12 @@ public class PostgreDB {
         return data;
     }
 
+    /**
+     * функция расчета дней
+     * @param dateStart начальная дата
+     * @param days количество прибавляемых дней
+     * @return LocalDate
+     */
     private LocalDate calcDateEnd(LocalDate dateStart ,int days) {
         java.util.Date date = new java.util.Date(dateStart.getYear(), dateStart.getMonthValue(), dateStart.getDayOfMonth());
         date.setDate(date.getDate() + days);

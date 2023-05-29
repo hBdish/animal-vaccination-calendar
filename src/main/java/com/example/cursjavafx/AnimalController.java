@@ -86,11 +86,9 @@ public class AnimalController implements Initializable {
         date_start.setCellValueFactory(new PropertyValueFactory<>("date_start"));
         date_end.setCellValueFactory(new PropertyValueFactory<>("date_end"));
 
-
         id_pills.setCellValueFactory(new PropertyValueFactory<>("id"));
         name_pills.setCellValueFactory(new PropertyValueFactory<>("name"));
         days_pills.setCellValueFactory(new PropertyValueFactory<>("days"));
-
 
         eventTable.setItems(db.getEvents());
         pillsTable.setItems(db.getPills());

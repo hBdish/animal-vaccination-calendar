@@ -3,26 +3,17 @@ package com.example.cursjavafx;
 import com.example.cursjavafx.classes.Animal;
 import com.example.cursjavafx.utils.Scenes;
 import com.example.cursjavafx.database.PostgreDB;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
-
-import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
 
 public class MainController implements Initializable {
-
     @FXML
     public TableView<Animal> animalTable;
     @FXML
@@ -45,7 +36,7 @@ public class MainController implements Initializable {
         animalTable.setItems(db.getAnimals());
     }
 
-    public void openAddAnimal(ActionEvent event) throws IOException {
+    public void openAddAnimal(ActionEvent event) {
         Scenes.ADD_ANIMAL.switchScene(event);
     }
 
@@ -63,6 +54,10 @@ public class MainController implements Initializable {
     }
 
     public void openCalendar(ActionEvent event) {
+        Animal animal = animalTable.getSelectionModel().getSelectedItems().get(0);
+        PostgreDB.idAnimal = animal.getId();
+        PostgreDB.nameAnimal = animal.getName();
+        PostgreDB.kindAnimal = animal.getKind();
         Scenes.CALENDAR.switchScene(event);
     }
 }

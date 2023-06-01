@@ -1,7 +1,5 @@
 package com.example.cursjavafx.classes;
 
-import java.util.Date;
-
 public class Pills {
     int id;
     String name;

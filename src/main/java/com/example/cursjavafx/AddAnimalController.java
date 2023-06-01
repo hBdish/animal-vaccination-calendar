@@ -2,8 +2,6 @@ package com.example.cursjavafx;
 
 import com.example.cursjavafx.database.PostgreDB;
 import com.example.cursjavafx.utils.Scenes;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -16,7 +14,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AddAnimalController implements Initializable {
-
     @FXML
     public ChoiceBox<String> choiceKindList;
     @FXML

@@ -1,7 +1,6 @@
 package com.example.cursjavafx.database;
 
 import com.example.cursjavafx.classes.Animal;
-import com.example.cursjavafx.HelloApplication;
 import com.example.cursjavafx.classes.CalendarActivity;
 import com.example.cursjavafx.classes.EventsAnimals;
 import com.example.cursjavafx.classes.Pills;
@@ -10,11 +9,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-
 import java.sql.*;
 import java.sql.Date;
 import java.time.LocalDate;
-
 import java.time.ZonedDateTime;
 import java.util.*;
 import java.util.logging.Level;
@@ -27,10 +24,8 @@ import java.util.logging.Logger;
  * Методы взаимодействия с базой данных
  */
 public class PostgreDB implements dbDao {
-
     public static int idUser;
     public static int idAnimal;
-
     public static String nameAnimal;
     public static String kindAnimal;
     public static String prescribing;
@@ -54,9 +49,6 @@ public class PostgreDB implements dbDao {
      */
     private Connection connection = null;
 
-    /**
-     * функция установки соединения с сервером базы данных
-     */
     @Override
     public void setConnection() {
         try {
@@ -68,12 +60,7 @@ public class PostgreDB implements dbDao {
         }
     }
 
-    /**
-     * функция создания нового пользователя
-     * @param name имя пользователя
-     * @param login логин пользователя
-     * @param password пароль пользователя
-     */
+
     @Override
     public void createUser(String name, String login, String password) {
         setConnection();
@@ -98,12 +85,6 @@ public class PostgreDB implements dbDao {
         }
     }
 
-    /**
-     * функция авторизации пользователя
-     * @param login логин пользователя
-     * @param password пароль пользователя
-     * @param event событие нажатия на кнопку
-     */
     @Override
     public void loginUser(String login, String password, ActionEvent event) {
         setConnection();
@@ -148,10 +129,7 @@ public class PostgreDB implements dbDao {
         }
     }
 
-    /**
-     * функция получения списка животных
-     * @return список животных
-     */
+
     @Override
     public ObservableList<Animal> getAnimals() {
         setConnection();
@@ -194,10 +172,7 @@ public class PostgreDB implements dbDao {
         }
         return data;
     }
-    /**
-     * функция получения списка видов животных
-     * @return список видов животных
-     */
+
     @Override
     public ObservableList<String> getKinds() {
         setConnection();
@@ -223,14 +198,7 @@ public class PostgreDB implements dbDao {
         return data;
     }
 
-    /**
-     * функция создания нового животного
-     * @param name кличка животного
-     * @param kind вид животного
-     * @param date дата рождения животного
-     * @param event событие нажатия на кнопку
-     * @param reglament булевое значение, определяющее необходимость учета регламента при создании животного
-     */
+
     @Override
     public void createAnimal(String name, String kind, LocalDate date, ActionEvent event, Boolean reglament) {
         setConnection();
@@ -323,15 +291,11 @@ public class PostgreDB implements dbDao {
         }
     }
 
-    /**
-     * функция удаления животного
-     * @param id id животного
-     */
+
     @Override
     public void deleteAnimal(int id, ActionEvent event) {
         setConnection();
 
-        ResultSet resultSet;
         String query = "DELETE FROM animals WHERE id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
@@ -351,10 +315,6 @@ public class PostgreDB implements dbDao {
         }
     }
 
-    /**
-     * функция получения списка мероприятий
-     * @return список мероприятий
-     */
     @Override
     public ObservableList<EventsAnimals> getEvents() {
         setConnection();
@@ -388,18 +348,10 @@ public class PostgreDB implements dbDao {
         return data;
     }
 
-    /**
-     * функция создания нового мероприятия
-     * @param name название мероприятия
-     * @param date_start дата начала мероприятия
-     * @param date_end дата конца мероприятия
-     * @param event событие нажатия на кнопку
-     */
     @Override
     public void createEvent(String name, LocalDate date_start, LocalDate date_end, ActionEvent event) {
         setConnection();
 
-        ResultSet resultSet;
         String query1 = "INSERT INTO events(name, date_start, date_end, animal_id) VALUES(?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(query1)) {
@@ -423,23 +375,16 @@ public class PostgreDB implements dbDao {
         }
     }
 
-    /**
-     * функция добавления мероприятия из регламента
-     * @param name название мероприятия
-     * @param date_start дата начала мероприятия
-     * @param date_end дата конца мероприятия
-     */
     @Override
     public void createEventreglament(String name, LocalDate date_start, LocalDate date_end) {
 
-        ResultSet resultSet;
         String query1 = "INSERT INTO events(name, date_start, date_end, animal_id) VALUES(?, ?, ?, ?)";
 
         try (PreparedStatement pst = connection.prepareStatement(query1)) {
             pst.setString(1, name);
             pst.setDate(2, Date.valueOf(date_start));
             pst.setDate(3, Date.valueOf(date_end));
-            pst.setInt(4, this.idAnimal);
+            pst.setInt(4, idAnimal);
             pst.executeUpdate();
             System.out.println("success created event");
         } catch (SQLException error) {
@@ -448,15 +393,11 @@ public class PostgreDB implements dbDao {
         }
     }
 
-    /**
-     * функция удаления мероприятия
-     * @param id id мероприятия
-     */
+
     @Override
     public void deleteEvent(int id, ActionEvent event) {
         setConnection();
 
-        ResultSet resultSet;
         String query = "DELETE FROM events WHERE id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
@@ -476,11 +417,7 @@ public class PostgreDB implements dbDao {
         }
     }
 
-    /**
-     * функция получения списка мероприятий в месяце
-     * @param dateFocus дата
-     * @return список мероприятий на месяц
-     */
+
     @Override
     public Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(ZonedDateTime dateFocus) {
         setConnection();
@@ -555,11 +492,7 @@ public class PostgreDB implements dbDao {
         return createCalendarMap(calendarActivities);
     }
 
-    /**
-     * функция создания списка мароприятий
-     * @param calendarActivities календарь активностей на месяц
-     * @return список мароприятий
-     */
+
     @Override
     public Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> calendarActivities) {
         Map<Integer, List<CalendarActivity>> calendarActivityMap = new HashMap<>();
@@ -578,10 +511,7 @@ public class PostgreDB implements dbDao {
         return  calendarActivityMap;
     }
 
-    /**
-     * функция получения списка мероприятий для определенного вида животных
-     * @return список мероприятий для определенного вида животных
-     */
+
     @Override
     public ObservableList<Pills> getPills() {
         setConnection();
@@ -654,10 +584,6 @@ public class PostgreDB implements dbDao {
 
     }
 
-    /**
-     * функция получения списка видов мероприятий
-     * @return список видов мероприятий
-     */
     @Override
     public ObservableList<String> getPrescribing() {
         setConnection();
@@ -684,13 +610,12 @@ public class PostgreDB implements dbDao {
     }
 
     /**
-     * функция расчета дней
-     * @param dateStart начальная дата
-     * @param days количество прибавляемых дней
-     * @return LocalDate
+     * Метод calcDateEnd() вычисляет дату окончания заданного периода времени, начиная с указанной даты.
+     * @param dateStart начальная дата периода времени
+     * @param days количество дней, на которое нужно продлить период
+     * @return дата окончания периода времени в формате LocalDate
      */
-
-    public LocalDate calcDateEnd(LocalDate dateStart, int days) {
+    public static LocalDate calcDateEnd(LocalDate dateStart, int days) {
         java.util.Date date = new java.util.Date(dateStart.getYear(), dateStart.getMonthValue(), dateStart.getDayOfMonth());
         date.setDate(date.getDate() + days);
         LocalDate dateEnd = LocalDate.of(date.getYear(), date.getMonth() + 1, date.getDay() + 16);

@@ -6,14 +6,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
-import java.io.IOException;
 import java.util.regex.Pattern;
 
 public class LoginController {
     public TextField login;
     public TextField password;
-    private String regexPassword = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$";
-    private String regexLogin = "^[a-zA-Z][a-zA-Z0-9-_\\.]{4,20}$";
+    private final String regexPassword = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{4,8}$";
+    private final String regexLogin = "^[a-zA-Z][a-zA-Z0-9-_\\.]{4,20}$";
     PostgreDB db = PostgreDB.singleBD;
     @FXML
     protected void switchToRegPage(ActionEvent event) {

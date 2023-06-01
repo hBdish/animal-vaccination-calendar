@@ -107,16 +107,9 @@ public class AnimalController implements Initializable {
     public void addPills(ActionEvent event) {
         Pills pills = pillsTable.getSelectionModel().getSelectedItem();
         LocalDate dateStart = date_start_pills.getValue();
-        LocalDate dateEnd = calcDateEnd(dateStart, pills.getDays());
+        LocalDate dateEnd = PostgreDB.calcDateEnd(dateStart, pills.getDays());
         db.createEvent(pills.getName(), dateStart, dateEnd, event);
-
     }
 
-    private LocalDate calcDateEnd(LocalDate dateStart ,int days) {
-        Date date = new Date(dateStart.getYear(), dateStart.getMonthValue(), dateStart.getDayOfMonth());
-        date.setDate(date.getDate() + days);
-        LocalDate dateEnd = LocalDate.of(date.getYear(), date.getMonth() + 1, date.getDay() + 16);
 
-        return dateEnd;
-    }
 }

@@ -56,9 +56,9 @@ public class MainController implements Initializable {
 
     public void openAnimal(ActionEvent event) {
             Animal animal = animalTable.getSelectionModel().getSelectedItems().get(0);
-            HelloApplication.idAnimal = animal.getId();
-            HelloApplication.nameAnimal = animal.getName();
-            HelloApplication.kindAnimal = animal.getKind();
+            PostgreDB.idAnimal = animal.getId();
+            PostgreDB.nameAnimal = animal.getName();
+            PostgreDB.kindAnimal = animal.getKind();
             Scenes.ANIMAL_EVENTS.switchScene(event);
     }
 

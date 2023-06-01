@@ -28,6 +28,13 @@ import java.util.logging.Logger;
  */
 public class PostgreDB implements dbDao {
 
+    public static int idUser;
+    public static int idAnimal;
+
+    public static String nameAnimal;
+    public static String kindAnimal;
+    public static String prescribing;
+
     public static final PostgreDB singleBD = new PostgreDB();
 
     /**
@@ -115,7 +122,7 @@ public class PostgreDB implements dbDao {
                 alert.show();
             } else {
                 while (resultSet.next()) {
-                    HelloApplication.idUser = resultSet.getInt("id");
+                    idUser = resultSet.getInt("id");
                     String log = resultSet.getString("login");
                     String pass = resultSet.getString("password");
 
@@ -154,7 +161,7 @@ public class PostgreDB implements dbDao {
         String query = "SELECT * FROM animals JOIN kinds ON animals.kind_id = kinds.id WHERE user_id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, HelloApplication.idUser);
+            pst.setInt(1, idUser);
             resultSet = pst.executeQuery();
 
             if (!resultSet.isBeforeFirst()) {
@@ -256,7 +263,7 @@ public class PostgreDB implements dbDao {
             pst.setString(1, name);
             pst.setInt(2, kind_id);
             pst.setDate(3, Date.valueOf(date));
-            pst.setInt(4, HelloApplication.idUser);
+            pst.setInt(4, PostgreDB.idUser);
             pst.executeUpdate();
             System.out.println("success created animal");
         } catch (SQLException error) {
@@ -266,14 +273,14 @@ public class PostgreDB implements dbDao {
             if (reglament) {
 
                 try (PreparedStatement pst = connection.prepareStatement(queryIdAnimal)) {
-                    pst.setInt(1, HelloApplication.idUser);
+                    pst.setInt(1, PostgreDB.idUser);
                     pst.setString(2, name);
                     pst.setDate(3, Date.valueOf(date));
                     resultSet = pst.executeQuery();
 
                     try {
                         while (resultSet.next()) {
-                            HelloApplication.idAnimal = resultSet.getInt("id");
+                            idAnimal = resultSet.getInt("id");
                         }
                     } catch (SQLException error) {
                         System.out.println(error.getMessage());
@@ -357,7 +364,7 @@ public class PostgreDB implements dbDao {
         String query = "SELECT * FROM events WHERE animal_id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, HelloApplication.idAnimal);
+            pst.setInt(1, idAnimal);
             resultSet = pst.executeQuery();
 
             try {
@@ -399,7 +406,7 @@ public class PostgreDB implements dbDao {
             pst.setString(1, name);
             pst.setDate(2, Date.valueOf(date_start));
             pst.setDate(3, Date.valueOf(date_end));
-            pst.setInt(4, HelloApplication.idAnimal);
+            pst.setInt(4, idAnimal);
             pst.executeUpdate();
             System.out.println("success created event");
         } catch (SQLException error) {
@@ -432,7 +439,7 @@ public class PostgreDB implements dbDao {
             pst.setString(1, name);
             pst.setDate(2, Date.valueOf(date_start));
             pst.setDate(3, Date.valueOf(date_end));
-            pst.setInt(4, HelloApplication.idAnimal);
+            pst.setInt(4, this.idAnimal);
             pst.executeUpdate();
             System.out.println("success created event");
         } catch (SQLException error) {
@@ -489,8 +496,8 @@ public class PostgreDB implements dbDao {
                 "WHERE users.id = ? AND animals.id = ?";
 
         try (PreparedStatement pst = connection.prepareStatement(query)) {
-            pst.setInt(1, HelloApplication.idUser);
-            pst.setInt(2, HelloApplication.idAnimal);
+            pst.setInt(1, idUser);
+            pst.setInt(2, idAnimal);
             resultSet = pst.executeQuery();
 
             try {
@@ -499,7 +506,7 @@ public class PostgreDB implements dbDao {
                     String event_name = resultSet.getString("event_name");
                     java.util.Date date_start = resultSet.getDate("event_date_start");
                     java.util.Date date_end = resultSet.getDate("event_date_end");
-
+                    System.out.println(animal_name);
 
                     ZonedDateTime timeStart = ZonedDateTime.of(
                             date_start.getYear() + 1900,
@@ -589,7 +596,7 @@ public class PostgreDB implements dbDao {
         int prescribing_id = 0;
 
         try (PreparedStatement pst = connection.prepareStatement(queryKind)) {
-            pst.setString(1, HelloApplication.kindAnimal);
+            pst.setString(1, kindAnimal);
             resultSet = pst.executeQuery();
 
             try {
@@ -605,7 +612,7 @@ public class PostgreDB implements dbDao {
         }
 
         try (PreparedStatement pst = connection.prepareStatement(queryPrescribing)) {
-            pst.setString(1, HelloApplication.prescribing);
+            pst.setString(1, prescribing);
             resultSet = pst.executeQuery();
 
             try {

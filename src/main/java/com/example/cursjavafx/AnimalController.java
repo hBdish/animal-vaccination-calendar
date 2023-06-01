@@ -8,18 +8,12 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
+
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.DragEvent;
-import javafx.scene.input.MouseDragEvent;
-import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Date;
@@ -62,17 +56,17 @@ public class AnimalController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        idLable.setText(HelloApplication.nameAnimal);
+        idLable.setText(PostgreDB.nameAnimal);
         ObservableList<String> dataPrescribing = db.getPrescribing();
 
         prescribing.setItems(dataPrescribing);
         prescribing.setValue(dataPrescribing.get(0));
-        HelloApplication.prescribing = dataPrescribing.get(0);
+        PostgreDB.prescribing = dataPrescribing.get(0);
 
         prescribing.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                HelloApplication.prescribing = prescribing.getItems().get((Integer) newValue);
+                PostgreDB.prescribing = prescribing.getItems().get((Integer) newValue);
                 setTable(db);
             }
         });
@@ -97,7 +91,7 @@ public class AnimalController implements Initializable {
 
     public void addEvent(ActionEvent event) {
         db.createEvent(name_event.getText(), date_start_event.getValue(), date_end_event.getValue(), event);
-        System.out.println(HelloApplication.idAnimal);
+        System.out.println(PostgreDB.idAnimal);
     }
 
     public void deleteEvent(ActionEvent event) {

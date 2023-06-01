@@ -9,11 +9,7 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
-    public static int idUser;
-    public static int idAnimal;
-    public static String nameAnimal;
-    public static String kindAnimal;
-    public static String prescribing;
+
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-view.fxml"));

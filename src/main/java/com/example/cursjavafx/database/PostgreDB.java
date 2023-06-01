@@ -26,9 +26,9 @@ import java.util.logging.Logger;
  * Содержит:
  * Методы взаимодействия с базой данных
  */
+public class PostgreDB implements dbDao {
 
-public class PostgreDB {
-    public static final PostgreDB bd = new PostgreDB();
+    public static final PostgreDB singleBD = new PostgreDB();
 
     /**
      * строка подключения к серверу базы данных
@@ -50,7 +50,8 @@ public class PostgreDB {
     /**
      * функция установки соединения с сервером базы данных
      */
-    private void setConnection() {
+    @Override
+    public void setConnection() {
         try {
             this.connection = DriverManager
                     .getConnection(DB_URL, USER, PASS);
@@ -66,6 +67,7 @@ public class PostgreDB {
      * @param login логин пользователя
      * @param password пароль пользователя
      */
+    @Override
     public void createUser(String name, String login, String password) {
         setConnection();
         String query = "INSERT INTO users(name, login, password) VALUES(?, ?, ?)";
@@ -95,6 +97,7 @@ public class PostgreDB {
      * @param password пароль пользователя
      * @param event событие нажатия на кнопку
      */
+    @Override
     public void loginUser(String login, String password, ActionEvent event) {
         setConnection();
 
@@ -142,6 +145,7 @@ public class PostgreDB {
      * функция получения списка животных
      * @return список животных
      */
+    @Override
     public ObservableList<Animal> getAnimals() {
         setConnection();
 
@@ -187,6 +191,7 @@ public class PostgreDB {
      * функция получения списка видов животных
      * @return список видов животных
      */
+    @Override
     public ObservableList<String> getKinds() {
         setConnection();
 
@@ -219,6 +224,7 @@ public class PostgreDB {
      * @param event событие нажатия на кнопку
      * @param reglament булевое значение, определяющее необходимость учета регламента при создании животного
      */
+    @Override
     public void createAnimal(String name, String kind, LocalDate date, ActionEvent event, Boolean reglament) {
         setConnection();
 
@@ -314,6 +320,7 @@ public class PostgreDB {
      * функция удаления животного
      * @param id id животного
      */
+    @Override
     public void deleteAnimal(int id, ActionEvent event) {
         setConnection();
 
@@ -341,6 +348,7 @@ public class PostgreDB {
      * функция получения списка мероприятий
      * @return список мероприятий
      */
+    @Override
     public ObservableList<EventsAnimals> getEvents() {
         setConnection();
 
@@ -380,6 +388,7 @@ public class PostgreDB {
      * @param date_end дата конца мероприятия
      * @param event событие нажатия на кнопку
      */
+    @Override
     public void createEvent(String name, LocalDate date_start, LocalDate date_end, ActionEvent event) {
         setConnection();
 
@@ -413,6 +422,7 @@ public class PostgreDB {
      * @param date_start дата начала мероприятия
      * @param date_end дата конца мероприятия
      */
+    @Override
     public void createEventreglament(String name, LocalDate date_start, LocalDate date_end) {
 
         ResultSet resultSet;
@@ -435,6 +445,7 @@ public class PostgreDB {
      * функция удаления мероприятия
      * @param id id мероприятия
      */
+    @Override
     public void deleteEvent(int id, ActionEvent event) {
         setConnection();
 
@@ -463,6 +474,7 @@ public class PostgreDB {
      * @param dateFocus дата
      * @return список мероприятий на месяц
      */
+    @Override
     public Map<Integer, List<CalendarActivity>> getCalendarActivitiesMonth(ZonedDateTime dateFocus) {
         setConnection();
 
@@ -541,7 +553,8 @@ public class PostgreDB {
      * @param calendarActivities календарь активностей на месяц
      * @return список мароприятий
      */
-    private Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> calendarActivities) {
+    @Override
+    public Map<Integer, List<CalendarActivity>> createCalendarMap(List<CalendarActivity> calendarActivities) {
         Map<Integer, List<CalendarActivity>> calendarActivityMap = new HashMap<>();
 
         for (CalendarActivity activity: calendarActivities) {
@@ -562,6 +575,7 @@ public class PostgreDB {
      * функция получения списка мероприятий для определенного вида животных
      * @return список мероприятий для определенного вида животных
      */
+    @Override
     public ObservableList<Pills> getPills() {
         setConnection();
 
@@ -637,6 +651,7 @@ public class PostgreDB {
      * функция получения списка видов мероприятий
      * @return список видов мероприятий
      */
+    @Override
     public ObservableList<String> getPrescribing() {
         setConnection();
 
@@ -667,7 +682,8 @@ public class PostgreDB {
      * @param days количество прибавляемых дней
      * @return LocalDate
      */
-    private LocalDate calcDateEnd(LocalDate dateStart ,int days) {
+
+    public LocalDate calcDateEnd(LocalDate dateStart, int days) {
         java.util.Date date = new java.util.Date(dateStart.getYear(), dateStart.getMonthValue(), dateStart.getDayOfMonth());
         date.setDate(date.getDate() + days);
         LocalDate dateEnd = LocalDate.of(date.getYear(), date.getMonth() + 1, date.getDay() + 16);

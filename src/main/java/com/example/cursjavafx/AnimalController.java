@@ -56,13 +56,14 @@ public class AnimalController implements Initializable {
     public ChoiceBox<String> prescribing;
     @FXML
     public DatePicker date_start_pills;
+    PostgreDB db = PostgreDB.singleBD;
 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         idLable.setText(HelloApplication.nameAnimal);
-        ObservableList<String> dataPrescribing = PostgreDB.bd.getPrescribing();
+        ObservableList<String> dataPrescribing = db.getPrescribing();
 
         prescribing.setItems(dataPrescribing);
         prescribing.setValue(dataPrescribing.get(0));
@@ -72,11 +73,11 @@ public class AnimalController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 HelloApplication.prescribing = prescribing.getItems().get((Integer) newValue);
-                setTable(PostgreDB.bd);
+                setTable(db);
             }
         });
 
-        setTable(PostgreDB.bd);
+        setTable(db);
 
     }
 
@@ -95,13 +96,13 @@ public class AnimalController implements Initializable {
     }
 
     public void addEvent(ActionEvent event) {
-        PostgreDB.bd.createEvent(name_event.getText(), date_start_event.getValue(), date_end_event.getValue(), event);
+        db.createEvent(name_event.getText(), date_start_event.getValue(), date_end_event.getValue(), event);
         System.out.println(HelloApplication.idAnimal);
     }
 
     public void deleteEvent(ActionEvent event) {
         EventsAnimals eventsAnimals = eventTable.getSelectionModel().getSelectedItem();
-        PostgreDB.bd.deleteEvent(eventsAnimals.getId(), event);
+        db.deleteEvent(eventsAnimals.getId(), event);
     }
 
     public void switchToMain(ActionEvent event) {
@@ -113,7 +114,7 @@ public class AnimalController implements Initializable {
         Pills pills = pillsTable.getSelectionModel().getSelectedItem();
         LocalDate dateStart = date_start_pills.getValue();
         LocalDate dateEnd = calcDateEnd(dateStart, pills.getDays());
-        PostgreDB.bd.createEvent(pills.getName(), dateStart, dateEnd, event);
+        db.createEvent(pills.getName(), dateStart, dateEnd, event);
 
     }
 

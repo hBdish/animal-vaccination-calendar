@@ -24,18 +24,16 @@ public class AddAnimalController implements Initializable {
     @FXML
     public DatePicker date;
     public CheckBox idReglament;
-
-//    PostgreDB db = new PostgreDB();
+    PostgreDB db = PostgreDB.singleBD;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-
-        choiceKindList.setItems(PostgreDB.bd.getKinds());
-        choiceKindList.setValue(PostgreDB.bd.getKinds().get(0));
+        choiceKindList.setItems(db.getKinds());
+        choiceKindList.setValue(db.getKinds().get(0));
     }
 
     public void addAnimal(ActionEvent event) {
-        PostgreDB.bd.createAnimal(name.getText(), choiceKindList.getValue(), date.getValue(), event, idReglament.isSelected());
+        db.createAnimal(name.getText(), choiceKindList.getValue(), date.getValue(), event, idReglament.isSelected());
     }
 
     public void backOnMain(ActionEvent event) {

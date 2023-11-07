@@ -1,34 +1,34 @@
-# КУРСОВОЙ ПРОЕКТ
+# COURSE PROJECT
 
 ---
-**Тема:**
+**Subject:**
 
-> Разработка ПС "Календарь прививок домашних питомцев"
+> Development of the PS "Calendar of vaccinations of pets"
 
 
 
-**Технологический стек:**
+**Technology stack:**
 * JAVA
 * JavaFX
 * BoostrapFX
 
-**Инструменты:**
-* Использование системы сборки Maven.
+**Tools:**
+* Using the Maven build system.
 
-**Использованные паттерны:**
+**Patterns used:**
 * DAO.
 * Singleton.
 
-**Архитектура:**
-> В качестве архитектурного стиля для данного курсового проекта был выбран MVC (модель, представление, контроллер). Данный вид построения проекта поможет построить его таким образом, чтобы пользователь, взаимодействуя с представлением, подавал сигнал контроллеру, а контроллер, принимая данный сигнал, по-разному управлял моделью (всеми классами и интерфейсами, находящимися в модели).
+**Architecture:**
+> MVC (model, view, controller) was chosen as the architectural style for this course project. This type of project construction will help to build it in such a way that the user, interacting with the view, sends a signal to the controller, and the controller, receiving this signal, controls the model in different ways (all classes and interfaces located in the model).
 
 
 ---
-Язык разработки Java.
+Java development language.
 
-Для создания пользовательского интерфейса используется платформа JavaFX.
+The JavaFX platform is used to create the user interface.
 
-Bootstrap — это открытый и бесплатный HTML, CSS и JS фреймворк, который используется веб-разработчиками для быстрой вёрстки адаптивных дизайнов сайтов и веб-приложений.
+Bootstrap is an open and free HTML, CSS and JS framework that is used by web developers for fast layout of responsive website designs and web applications.
 
-## Приглашение к сотрудничеству
-Загрузите исходные тексты или клонируйте их с помощью команды git clone в выбранный каталог: git clone [https://github.com/hBdish/cursJavaFX](https://github.com/hBdish/cursJavaFX) и создайте ветку
+## Invitation to cooperation
+Download the source texts or clone them using com

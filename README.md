@@ -3,7 +3,7 @@
 ---
 **Subject:**
 
-> Development of the PS "Calendar of vaccinations of pets"
+> Development of the software - "Calendar of vaccinations of pets"
 
 
 
